@@ -1,0 +1,31 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+#Porting Checker
+
+__author__ = 'Tan Ying<ying.tan@tcl.com>' 
+
+import os
+import sys
+import utils
+import log
+import commands
+
+logger = log.getLogging('PortingChecker')
+
+
+def main():
+    path_dict = utils.get_path_from_phone()
+    for pkg in path_dict:
+        logger.debug('-----package name:%s-----'% pkg)
+
+        #pkg_version = utils.get_version_from_phone(pkg)
+        pkg_version = ''
+        pkg_path = path_dict[pkg]
+
+        check_handler(pkg, pkg_path, pkg_version)
+
+def check_handler(name, path, version):
+    utils.get_path_from_phone()
+
+if __name__ == '__main__':
+    main()

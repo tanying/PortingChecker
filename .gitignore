@@ -48,7 +48,11 @@ coverage.xml
 # Django stuff:
 *.log
 *.pot
+*.txt
 
 # Sphinx documentation
 docs/_build/
+
+# User
+.gitignore
 
