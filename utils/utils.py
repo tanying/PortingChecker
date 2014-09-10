@@ -28,7 +28,7 @@ def get_path_from_phone():
         path_dict = get_pkg_path_dict()
         return path_dict
     else:
-        sys.exit(0)
+        sys.exit(1)
 
 def get_version_from_phone(pkg_name):
     command = 'adb shell pm dump %s|grep versionName'
