@@ -45,10 +45,15 @@
     },
     "com.jrdcom.weather":{
         "path":"/custpack/app/unremoveable/withoutlibs/JrdWeather_common_v1.8.026_signed.apk",
-        "versionName":"v1.8.027"
+	"versionName": ""
     },
     "com.jrdcom.mmitest":{
+        "path":"/system/priv-app/MMITestdev.apk",
+        "versionName":"4.4.2-vC9"
+    },
+    "com.jrdcom.tanya":{
         "path":"/system/app/MMITestdev.apk",
         "versionName":"4.4.2-vC9T-4"
     }
+
 }

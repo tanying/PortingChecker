@@ -28,7 +28,7 @@ def main():
         if info:
             result_string += '%s\n' % pkg
             if info.has_key('info'):
-                result_string += '    ' % info['info']
+                result_string += '    %s' % info['info']
             else:
                 if info.has_key('pkg_path'):
                     result_string += '    Different path,\n'
@@ -50,7 +50,7 @@ def check_handler(standard_dict, path_dict):
     diff_dict = {}
 
     for pkg in standard_dict:
-        print 'Checking %s now' % pkg
+        print 'Checking %s now...' % pkg
         diff_dict[pkg] = {}
 
         if path_dict.has_key(pkg):
@@ -67,7 +67,9 @@ def check_handler(standard_dict, path_dict):
                 else:
                     print '    Equal path'
             else:
-                raise StandardJsonError('Package:%s lack versionName in standard.json')
+                #raise StandardJsonError('Package:%s lack versionName in standard.json')
+                print 'Error: %s lack versionName in standard.json' % pkg
+                sys.exit(1)
 
             pkg_version = get_version_from_phone(pkg)
             if not pkg_version:
@@ -86,10 +88,13 @@ def check_handler(standard_dict, path_dict):
                 else:
                     print '    Equal version'
             else:
-                raise StandardJsonError('Package:%s lack versionName in standard.json')
+                #raise StandardJsonError('Package:%s lack versionName in standard.json' % pkg)
+                print 'Error: %s lack versionName in standard.json' % pkg
+                sys.exit(1)
 
         else:
             #out put error msg
+            print '    Package not porting.'
             diff_dict[pkg]['info'] = 'Package not porting.'
 
     return diff_dict
