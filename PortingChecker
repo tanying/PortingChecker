@@ -6,9 +6,6 @@ __author__ = 'Tan Ying<ying.tan@tcl.com>'
 
 import os
 import sys
-import utils
-import log
-import commands
 from utils import *
 
 logger = log.getLogging('PortingChecker')
