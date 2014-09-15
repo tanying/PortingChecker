@@ -6,6 +6,7 @@ __author__ = 'Tan Ying<ying.tan@tcl.com>'
 
 import os
 import sys
+import getopt
 from utils import *
 
 logger = log.getLogging('PortingChecker')
@@ -14,37 +15,22 @@ def main():
     """
     The entrance of Porting Checker
     """
-    # The standard_dict for comparation, transfered form standard.json
-    standard_dict = get_standard_pkg_config()
-    # The path_dict from phone
-    path_dict = get_path_from_phone()
-    # get the difference dict
-    diff_dict = check_handler(standard_dict, path_dict)
-    # displace diff_dict in compare_result.txt
-    result_string = ''
-    for pkg in diff_dict:
-        info = diff_dict[pkg]
+    try:
+    #getopt方法会自动过滤参数中的引号;为保持统一，对参数的处理默认会过滤掉引号
+        opts, args = getopt.getopt(sys.argv[1:], '', ['config='])
+    except getopt.GetoptError, e: 
+        print e
+        sys.exit(1)
 
-        if info:
-            result_string += '%s\n' % pkg
-            if info.has_key('info'):
-                result_string += '    %s\n' % info['info']
-            else:
-                if info.has_key('pkg_path'):
-                    result_string += '    Different path,\n'
-                    result_string += '        standard_path: %s\n' % info['standard_path']
-                    result_string += '        pkg_path: %s\n' % info['pkg_path']
-                if info.has_key('pkg_version'):
-                    result_string += '    Different version,\n'
-                    result_string += '        standard_version: %s\n' % info['standard_verison']
-                    result_string += '        pkg_version: %s\n' % info['pkg_version']
-            result_string += '\n'
-
-    f = open(config.RESULT_FILE, 'wb')
-    result = str(result_string)
-    f.write(result)
-    f.close()
-
+    if opts:
+        #opts[0] = [('--config', 'gms')]
+        if is_argument_in_dataset(opts[0][1], CONFIG_SET):
+        # start config html
+            os.system('firefox %s' % SET_STANDARD_JSON)
+        else:
+            print INVALID_CONFIG_ARGUMENT
+    else:
+        start_checking()
 
 def check_handler(standard_dict, path_dict):
     diff_dict = {}
@@ -98,6 +84,45 @@ def check_handler(standard_dict, path_dict):
             diff_dict[pkg]['info'] = 'Package not porting.'
 
     return diff_dict
+
+def start_checking():
+    # The standard_dict for comparation, transfered form standard.json
+    if not (os.path.isfile(STANDARD_3RD_FILE) and os.path.isfile(STANDARD_GMS_FILE)):
+        #raise PortingCheckerError('Not found the 3rd.json or gms.json')
+        print 'Error: Not found the 3rd.json or gms.json'
+        sys.exit(1)
+    else:
+        third_dict = get_standard_pkg_config(STANDARD_3RD_FILE)
+        gms_dict = get_standard_pkg_config(STANDARD_GMS_FILE)
+        standard_dict = merge_dict(third_dict, gms_dict)
+    # The path_dict from phone
+    path_dict = get_path_from_phone()
+    # get the difference dict
+    diff_dict = check_handler(standard_dict, path_dict)
+    # displace diff_dict in compare_result.txt
+    result_string = ''
+    for pkg in diff_dict:
+        info = diff_dict[pkg]
+
+        if info:
+            result_string += '%s\n' % pkg
+            if info.has_key('info'):
+                result_string += '    %s\n' % info['info']
+            else:
+                if info.has_key('pkg_path'):
+                    result_string += '    Different path,\n'
+                    result_string += '        standard_path: %s\n' % info['standard_path']
+                    result_string += '        pkg_path: %s\n' % info['pkg_path']
+                if info.has_key('pkg_version'):
+                    result_string += '    Different version,\n'
+                    result_string += '        standard_version: %s\n' % info['standard_verison']
+                    result_string += '        pkg_version: %s\n' % info['pkg_version']
+            result_string += '\n'
+
+    f = open(config.RESULT_FILE, 'wb')
+    result = str(result_string)
+    f.write(result)
+    f.close()
 
 if __name__ == '__main__':
     main()

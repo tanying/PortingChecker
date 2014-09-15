@@ -11,15 +11,32 @@ import commands
 
 logger = log.getLogging('utils.py')
 
+def is_argument_in_dataset(argument, dataset, ignore_case = False):
+    """
+    参数是否在数据集中
+    """
+    for item in dataset:
+        if ignore_case:
+            if argument.upper() == item:
+                return True
+        else:
+            if argument == item:
+                return True
+    return False 
+
 def compare_string(s1, s2):
     return (s1 == s2) and True or False
 
-def get_standard_pkg_config():
-    fIn = open(config.STANDARD_FILE, 'rb')
+def merge_dict(dict1,dict2):
+    dict_merged=dict(dict1, **dict2)
+    return dict_merged
+
+def get_standard_pkg_config(filepath):
+    fIn = open(filepath, 'rb')
     text = fIn.read()
     fIn.close()
-    standard_pkg_dict = json.loads(text)
-    return standard_pkg_dict
+    file_dict = json.loads(text)
+    return file_dict
 
 def get_path_from_phone():
     shell_file_path = sys.path[0] + '/' + config.PULL_PATH_FILE
@@ -69,7 +86,7 @@ class Info(object):
         print self.message 
 
 
-class StandardJsonError(Exception):
+class PortingCheckerError(Exception):
     def __init__(self, message):
         self.message = message
     def __str__(self):
