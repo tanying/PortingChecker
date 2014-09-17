@@ -1,5 +1,7 @@
 i = 0
 
+window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+
 $(function() {
     $('#addApk').bind('click', addApk);
 });
@@ -51,26 +53,54 @@ function generateJson(){
     var array = [];
     var isNormalQuit = true;
     $('input').each(function(){
-        key = $(this).attr('id');
+        //key = $(this).attr('id');
         value = $(this).val();
         if(!value){
             alert('Please fill the value of ' + key);
             isNormalQuit = false;
             return false;
         }
-        array.push([key, value]);
+        array.push(value);
     })
 
     if(isNormalQuit){
-        var filename = prompt('Please input filename:', '3rd.json');
-    }
-    else{
-        window.requestFileSystem(window.TEMPORARY, 1024*1024, onInitFs, errorHandler);
+        result = confirm('Generate json now?')
+        if (result){
+            changeArrayToJson(array);
+        }
+        else{
+            return;
+        }
     }
 }
 
 function changeArrayToJson(array){
+    var jsonObj = {};
+    var pkg = '';
+    var path = '';
+    var ver= '';
 
+    $.each(array,function(n,value) {  
+        mod = n%3;
+        switch(mod){
+            case 0: pkg = value;
+            case 1: path = value;
+            case 2: ver =value;
+                    jsonObj[pkg] = {};
+                    jsonObj[pkg]['path'] = path;
+                    jsonObj[pkg]['versionName'] = ver;
+        }
+    });
+    var json = JSON.stringify(jsonObj)
+    displayJsonToDom(json);
+    $.post("testAjax.py",json, function(data,status){
+        alert("Data: " + data + "\nStatus: " + status);
+    });
+}
+
+function displayJsonToDom(json){
+    $('body').empty();
+    $('body').append(json);
 }
 
 function compareString(s1, s2){
@@ -93,33 +123,4 @@ function setInnerHtmlValue(i, pkg, path, version){
 function isEmptyObject(obj){
     for(var n in obj){return false} 
     return true; 
-} 
-
-
-function onInitFs(fs) {
-
-  fs.root.getFile('log.txt', {create: true}, function(fileEntry) {
-
-    // Create a FileWriter object for our FileEntry (log.txt).
-    fileEntry.createWriter(function(fileWriter) {
-
-      fileWriter.onwriteend = function(e) {
-        console.log('Write completed.');
-      };
-
-      fileWriter.onerror = function(e) {
-        console.log('Write failed: ' + e.toString());
-      };
-
-      // Create a new Blob and write it to log.txt.
-      var bb = new BlobBuilder(); 
-     // Note: window.WebKitBlobBuilder.
-      bb.append('Meow');
-      
-      fileWriter.write(bb.getBlob('text/plain'));
-
-    }, errorHandler);
-
-  }, errorHandler);
-
 }

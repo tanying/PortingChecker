@@ -26,11 +26,12 @@ def main():
         #opts[0] = [('--config', 'gms')]
         if is_argument_in_dataset(opts[0][1], CONFIG_SET):
         # start config html
-            os.system('firefox %s' % SET_STANDARD_JSON)
+            os.system('python -m SimpleHTTPServer 1234');
+            #os.system('firefox %s' % SET_STANDARD_JSON)
         else:
             print INVALID_CONFIG_ARGUMENT
     else:
-        start_checking()
+        start_checking()    
 
 def check_handler(standard_dict, path_dict):
     diff_dict = {}
