@@ -26,7 +26,8 @@ def main():
         #opts[0] = [('--config', 'gms')]
         if is_argument_in_dataset(opts[0][1], CONFIG_SET):
         # start config html
-            os.system('python -m SimpleHTTPServer 1234');
+            filepath = opts[0][1]
+            os.system('python -m simpleHttpServerWithPost %s' % filepath)
             #os.system('firefox %s' % SET_STANDARD_JSON)
         else:
             print INVALID_CONFIG_ARGUMENT

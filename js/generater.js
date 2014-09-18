@@ -1,13 +1,38 @@
-i = 0
+var count = 0;
+var exist_count = 0;
 
 window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
 
 $(function() {
+    var response_data
+    $.get("config/3rd.json",function(data,status){
+        //alert("Data: " + data + "\nStatus: " + status);
+        displayExistJsonOnDom(data);
+    });
+
     $('#addApk').bind('click', addApk);
 });
 
+function displayExistJsonOnDom(data){
+    jsonObj = JSON.parse(data);
+    for(var key in jsonObj){
+        alert(key);
+        addApkInnerHtml(count);
+
+        attrObj = jsonObj[key];
+        path = attrObj['path'];
+        version = attrObj['versionName'];
+
+        setInnerHtmlValue(count, key, path, version);
+        count++;
+    }
+    exist_count = count;
+    $('#addApk').after('<button id="generate">generate json</button>')
+    $('#generate').bind('click', generateJson);
+}
+
 function addApk(){
-    j = i - 1
+    j = count - 1
     if(j >= 0){
         pkgname = $('#pkg' + j).val();
         path = ($('#path' + j).val());
@@ -23,8 +48,8 @@ function addApk(){
                 r3 = compareString(version, pre_version);
                 if (r1 && r2 && r3){
                     setInnerHtmlValue(j, pkgname, path, version);
-                    addApkInnerHtml(i);
-                    i++;
+                    addApkInnerHtml(count);
+                    count++;
                 }
                 else{
                     alert('Please input different content for different Package!');
@@ -32,8 +57,8 @@ function addApk(){
             }
             else{
                 setInnerHtmlValue(j, pkgname, path, version);
-                addApkInnerHtml(i);
-                i++;
+                addApkInnerHtml(count);
+                count++;
             }
         }
         else{
@@ -41,8 +66,8 @@ function addApk(){
         }
     }
     else{
-            addApkInnerHtml(i);
-            i++;
+            addApkInnerHtml(count);
+            count++;
 
             $('#addApk').after('<button id="generate">generate json</button>')
             $('#generate').bind('click', generateJson);
@@ -93,8 +118,8 @@ function changeArrayToJson(array){
     });
     var json = JSON.stringify(jsonObj)
     displayJsonToDom(json);
-    $.post("testAjax.py",json, function(data,status){
-        alert("Data: " + data + "\nStatus: " + status);
+    $.post("js/success.txt", json, function(data,status){
+        alert(data);
     });
 }
 

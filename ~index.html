@@ -1,14 +1,33 @@
-<!DOCTYPE html>
 <html>
-<head>
-    <title>Generate standard json</title>
-    <link rel="stylesheet" type="text/css" media="screen" href="style/generater.css"/>
-    <script language="javascript" src="js/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="js/generater.js" defer></script>
-</head>
-<body>
-    <h3>This page is used for generating the standard json file.</h3>
-    <div id="apkInfo"></div>
-    <button id="addApk">add apk</button>
-</body>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+        <title>test</title>
+        <script language="javascript" src="js/jquery-2.1.1.min.js"></script>
+        <script>
+
+            $(function()
+            {
+                $('#clickme').click(function(){
+                    alert('Im going to start processing');
+
+                    $.ajax({
+                        url: "testAjax.py",
+                        type: "post",
+                        datatype:"json",
+                        data: {'key':'value','key2':'value2'},
+                        success: function(response){
+                            alert(response.message);
+                            alert(response.keys);
+                        }
+                    });
+                });
+            });
+
+        </script>
+    </head>
+    <body>
+        <button id="clickme"> ~click me </button>
+    </body>
+
 </html>

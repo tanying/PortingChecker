@@ -13,6 +13,6 @@ STANDARD_GMS_FILE = 'config/gms.json'
 RESULT_FILE =  OUTPUT_DIR + 'compareResult.txt'
 PULL_PATH_FILE = 'utils/PullApkInfoFromPhone.sh'
 PATH_FILE = OUTPUT_DIR + 'apkList.txt'
-CONFIG_SET = ['gms', '3rd']
+CONFIG_SET = ['gms.json', '3rd.json']
 INVALID_CONFIG_ARGUMENT = 'Invalid config argument'
 SET_STANDARD_JSON = 'generater.html'
