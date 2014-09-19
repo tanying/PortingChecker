@@ -1,0 +1,47 @@
+/*for alignment for input*/
+
+#apkInfo {
+    margin-bottom: 18px;
+}
+
+#apkInfo p{
+    margin-top: 20px;
+}
+
+#apkInfo p div {
+    overflow: auto;
+    width: 100%;
+    margin: 5px 0;
+}
+
+#apkInfo p div label {
+    float: left;
+    display: block;
+    margin-left: 20px;  
+    margin-right: 5px;
+    text-transform: capitalize;
+
+    min-width: 150px;
+    width: auto !important;
+    width: 100px;
+    white-space: nowrap;
+    word-break: keep-all;
+}
+
+#apkInfo p div input {
+    display: block;
+    float: left;
+}
+
+#addApk {
+    float: left;
+    margin-left: 20px;
+}
+
+#generate {
+    float: left;
+}
+
+#result_json {
+    width:400px;
+}

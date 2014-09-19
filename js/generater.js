@@ -16,7 +16,6 @@ $(function() {
 function displayExistJsonOnDom(data){
     jsonObj = JSON.parse(data);
     for(var key in jsonObj){
-        alert(key);
         addApkInnerHtml(count);
 
         attrObj = jsonObj[key];
@@ -125,7 +124,23 @@ function changeArrayToJson(array){
 
 function displayJsonToDom(json){
     $('body').empty();
-    $('body').append(json);
+
+    jsonObj = JSON.parse(json);
+    var html = '{<br>'
+    for(var key in jsonObj){
+        html += '&nbsp;&nbsp;"' + key + '":{<br>';
+        attrObj = jsonObj[key];
+        path = attrObj['path'];
+        version = attrObj['versionName'];
+        html += '&nbsp;&nbsp;&nbsp;&nbsp;"path":"' + path + '",<br>'
+        html += '&nbsp;&nbsp;&nbsp;&nbsp;"versionName":"' + version + '"<br>'
+        html += '&nbsp;&nbsp;},<br>'
+    }
+    html = html.substring(0, html.length-5);
+    html += '<br>'
+    html += '}'
+
+    $('body').append(html);
 }
 
 function compareString(s1, s2){
@@ -134,9 +149,10 @@ function compareString(s1, s2){
 }
 
 function addApkInnerHtml(i){
-    $('#apkInfo').append('<p id="apk'+i+'">Package name: <input id="pkg'+i+'" value="" maxlength="256"></p>');
-    $('#pkg' + i).after('<br>path:<input id="path'+i+'" value="" maxlength="256">')
-    $('#path' + i).after('<br>version:<input id="version'+i+'" value="" maxlength="256">');
+    $('#apkInfo').append('<p id="apk'+i+'"></p>');
+    $('#apk' + i).append('<div><label>Package name: </label><input id="pkg'+i+'" value="" maxlength="256"></div>');
+    $('#apk' + i).append('<div><label>path:</label><input id="path'+i+'" value="" maxlength="256"></div>');
+    $('#apk' + i).append('<div><label>version:</label><input id="version'+i+'" value="" maxlength="256"></div>');
 }
 
 function setInnerHtmlValue(i, pkg, path, version){
