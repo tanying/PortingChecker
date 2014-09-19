@@ -9,9 +9,21 @@ import json
 PORT = 1234
 local_filepath = sys.argv[1]
 
+response_filepath = 'js/responseFilepath.txt'
+f = open(response_filepath, 'w')
+f.write(local_filepath)
+f.close()
+
 def format_JSON(json_str):
     print json_str
+
+    # json_str.replace('":{', '":{\n        ')
+    # json_str.replace('', '')
     json_dict = eval(json_str)
+
+    #sorted by key
+    sorted(json_dict.items(), key=lambda d: d[0]) 
+
     string = '{\n'
     for key in json_dict:
         string += '    "%s":{\n' % key
@@ -42,12 +54,10 @@ class ServerHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         length = int(self.headers['Content-Length'])
         qs = self.rfile.read(length)
         #post_data = urlparse.parse_qs(qs.decode('utf-8'))
-        print self.path
-        print qs
         output_JSON(qs)
         #form = cgi.FieldStorage()
         SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
-        httpd.socket.close()
+        #httpd.socket.close()
 
 
 Handler = ServerHandler

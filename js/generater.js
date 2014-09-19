@@ -1,14 +1,21 @@
 var count = 0;
 var exist_count = 0;
 
+var storeFilePath = '';
+
 window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+
 
 $(function() {
     var response_data
-    $.get("config/3rd.json",function(data,status){
+    $.get("js/responseFilepath.txt", function(data){
+        storeFilePath = "config/" + data;
+        $.get(storeFilePath,function(data,status){
         //alert("Data: " + data + "\nStatus: " + status);
         displayExistJsonOnDom(data);
     });
+
+    })
 
     $('#addApk').bind('click', addApk);
 });
@@ -26,7 +33,7 @@ function displayExistJsonOnDom(data){
         count++;
     }
     exist_count = count;
-    $('#addApk').after('<button id="generate">generate json</button>')
+    $('#addApk').after('<button id="generate">generate json</button>');
     $('#generate').bind('click', generateJson);
 }
 
