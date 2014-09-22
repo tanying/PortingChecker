@@ -25,6 +25,28 @@ def confirm_html_gen_over(filepath):
     else:
         print 'Please copy the json to the corresponding path!'
 
+def get_apk_version(dir):
+    for root,dirnames,filenames in os.walk(dir):
+        for file in filenames:
+            aapt_str = os.system('aapt dump badging %s | grep version' % file)
+            
+            # name_left = aapt_str.find('name')
+            # name_right = aapt_str.find(' versionCode') - 1
+            # name = aapt_str[name_left, name_right]
+
+            # version_left = aapt_str.find('versionName')
+            # version = aapt_str[version_left:]
+
+def generate_gmsjson_from_dir(dir):
+    gms_dir = dir + '/custo_wimdata_ng/wcustores/App/Unremoveable/GMS'
+    gms_pri_dir = dir + '/custo_wimdata_ng/wcustores/App/Unremoveable/GMS-pri'
+
+    print gms_dir 
+    #travel the directory to get the demand information
+    get_apk_version(gms_pri_dir)
+
+    
+
 def main():
     """
     The entrance of Porting Checker
@@ -45,6 +67,9 @@ def main():
             if generate_config_jsfile(filepath, js_filepath):
                 os.system('firefox %s' % HTML_GENERATER)
                 confirm_html_gen_over(filepath)
+        elif opts[0][1] == 'gmsdir':
+            project_dir = raw_input('Please input the Project directory path:')
+            generate_gmsjson_from_dir(project_dir)
         else:
             print INVALID_CONFIG_ARGUMENT
     else:
