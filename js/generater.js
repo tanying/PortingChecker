@@ -1,5 +1,4 @@
 var count = 0;
-var exist_count = 0;
 
 window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
 
@@ -21,9 +20,11 @@ function displayExistJsonOnDom(data){
         setInnerHtmlValue(count, key, path, version);
         count++;
     }
-    exist_count = count;
-    $('#addApk').after('<button id="generate">generate json</button>');
-    $('#generate').bind('click', generateJson);
+
+    if(count > 0){
+        $('#addApk').after('<button id="generate">generate json</button>');
+        $('#generate').bind('click', generateJson);
+    }
 }
 
 function changeArrayToJson(array){
@@ -78,9 +79,13 @@ function compareString(s1, s2){
 
 function addApkInnerHtml(i){
     $('#apkInfo').append('<p id="apk'+i+'"></p>');
+
     $('#apk' + i).append('<div><label>Package name: </label><input id="pkg'+i+'" value="" maxlength="256"></div>');
     $('#apk' + i).append('<div><label>path:</label><input id="path'+i+'" value="" maxlength="256"></div>');
     $('#apk' + i).append('<div><label>version:</label><input id="version'+i+'" value="" maxlength="256"></div>');
+
+    $('#apk' + i).append('<button id="del' + i +'" class="delete">delete apk</button>');
+    $('#del' + i).bind('click', deleteApk);
 }
 
 function setInnerHtmlValue(i, pkg, path, version){
@@ -140,16 +145,39 @@ function addApk(){
 function generateJson(){
     var array = [];
     var isNormalQuit = true;
+
     $('input').each(function(){
         //key = $(this).attr('id');
         value = $(this).val();
         if(!value){
-            alert('Please fill the value of ' + key);
+            alert('Please fill the value');
             isNormalQuit = false;
             return false;
         }
         array.push(value);
     })
+
+    if (count >=2){
+        j = count - 1;
+        pkgname = $('#pkg' + j).val();
+        path = ($('#path' + j).val());
+        version = ($('#version' + j).val());
+
+        k = count - 2;
+        pre_pkgname = $('#pkg' + k).val();
+        pre_path = ($('#path' + k).val());
+        pre_version = ($('#version' + k).val());
+
+        r1 = compareString(pkgname, pre_pkgname);
+        r2 = compareString(path, pre_path);
+        r3 = compareString(version, pre_version);
+
+        if (!(r1 && r2 && r3)){
+            alert('Please input different content for different Package!');
+            isNormalQuit = false;
+            return false;
+        }
+    }
 
     if(isNormalQuit){
         result = confirm('Generate json now?')
@@ -161,4 +189,15 @@ function generateJson(){
             return;
         }
     }
+}
+
+function deleteApk(){
+    var e = arguments[0] || window.event;
+    var src = e.srcElement || e.target; // src 就是事件的触发源
+
+    var id =src.id;
+    id = id.replace('del', '');
+
+    $('#apk' + id).remove();
+    count = count -1;
 }

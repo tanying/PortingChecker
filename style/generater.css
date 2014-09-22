@@ -33,9 +33,13 @@
     float: left;
 }
 
-#addApk {
+#addApk{
     float: left;
     margin-left: 20px;
+}
+
+.delete {
+    margin-left: 265px;
 }
 
 #generate {
