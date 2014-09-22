@@ -11,13 +11,27 @@ from utils import *
 
 logger = log.getLogging('PortingChecker')
 
+def get_confirm_result(string):
+    return (string.lower() == 'y' or string.lower() == 'yes') and True or False
+
+def confirm_html_gen_over(filepath):
+    print 'If already, Open the corresponding path now?'
+    gen_over = raw_input('press y(yes), else(no) \n')
+
+    if get_confirm_result(gen_over):
+        print 'If already, Press CTRL+C to exit'
+        os.system('gedit %s' % filepath)
+
+    else:
+        print 'Please copy the json to the corresponding path!'
+
 def main():
     """
     The entrance of Porting Checker
     """
     try:
     #getopt方法会自动过滤参数中的引号;为保持统一，对参数的处理默认会过滤掉引号
-        opts, args = getopt.getopt(sys.argv[1:], '', ['config='])
+        opts, args = getopt.getopt(sys.argv[1:], '', ['gen='])
     except getopt.GetoptError, e: 
         print e
         sys.exit(1)
@@ -26,9 +40,11 @@ def main():
         #opts[0] = [('--config', 'gms')]
         if is_argument_in_dataset(opts[0][1], CONFIG_SET):
         # start config html
-            filepath = opts[0][1]
-            os.system('python -m simpleHttpServerWithPost %s' % filepath)
-            #os.system('firefox %s' % SET_STANDARD_JSON)
+            filepath = 'config/' + opts[0][1]
+            js_filepath = config.STANDARD_JSON_CONFIG_JS
+            if generate_config_jsfile(filepath, js_filepath):
+                os.system('firefox %s' % HTML_GENERATER)
+                confirm_html_gen_over(filepath)
         else:
             print INVALID_CONFIG_ARGUMENT
     else:

@@ -75,7 +75,19 @@ def get_pkg_path_dict():
             path = row[0][index:]
             pkg_dict[name] = path
 
+    f.close()
     return pkg_dict
+
+def generate_config_jsfile(path, js_path):
+    fIn = open(path, 'r')
+    lines = fIn.read()
+    fIn.close()
+
+    string = 'var json= %s' % lines
+    fOut = open(js_path, 'w')
+    fOut.write(string)
+    fOut.close()
+    return True
 
 class Info(object):
     def __init__(self, message):

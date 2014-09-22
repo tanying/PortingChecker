@@ -1,27 +1,16 @@
 var count = 0;
 var exist_count = 0;
 
-var storeFilePath = '';
-
 window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
 
 
 $(function() {
-    var response_data
-    $.get("js/responseFilepath.txt", function(data){
-        storeFilePath = "config/" + data;
-        $.get(storeFilePath,function(data,status){
-        //alert("Data: " + data + "\nStatus: " + status);
-        displayExistJsonOnDom(data);
-    });
-
-    })
-
     $('#addApk').bind('click', addApk);
+    displayExistJsonOnDom(json);
 });
 
 function displayExistJsonOnDom(data){
-    jsonObj = JSON.parse(data);
+    jsonObj = data;
     for(var key in jsonObj){
         addApkInnerHtml(count);
 
@@ -35,6 +24,74 @@ function displayExistJsonOnDom(data){
     exist_count = count;
     $('#addApk').after('<button id="generate">generate json</button>');
     $('#generate').bind('click', generateJson);
+}
+
+function changeArrayToJson(array){
+    var jsonObj = {};
+    var pkg = '';
+    var path = '';
+    var ver= '';
+
+    $.each(array,function(n,value) {  
+        mod = n%3;
+        switch(mod){
+            case 0: pkg = value;
+            case 1: path = value;
+            case 2: ver =value;
+                    jsonObj[pkg] = {};
+                    jsonObj[pkg]['path'] = path;
+                    jsonObj[pkg]['versionName'] = ver;
+        }
+    });
+    var data = JSON.stringify(jsonObj)
+    displayJsonToDom(data);
+}
+
+function displayJsonToDom(data){
+    $('body').empty();
+
+    jsonObj = JSON.parse(data);
+    var html = '{<br>'
+    for(var key in jsonObj){
+        html += '&nbsp;&nbsp;"' + key + '":{<br>';
+        attrObj = jsonObj[key];
+        path = attrObj['path'];
+        version = attrObj['versionName'];
+        html += '&nbsp;&nbsp;&nbsp;&nbsp;"path":"' + path + '",<br>'
+        html += '&nbsp;&nbsp;&nbsp;&nbsp;"versionName":"' + version + '"<br>'
+        html += '&nbsp;&nbsp;},<br>'
+    }
+    html = html.substring(0, html.length-5);
+    html += '<br>'
+    html += '}'
+
+    $('body').append(html);
+    // $('body').append('<button id="save">save</button>')
+    // $('#save').bind('click', saveJson(data));
+
+}
+
+function compareString(s1, s2){
+    console.log(s1,s2);
+    return (s1 != s2) ? true : false;
+}
+
+function addApkInnerHtml(i){
+    $('#apkInfo').append('<p id="apk'+i+'"></p>');
+    $('#apk' + i).append('<div><label>Package name: </label><input id="pkg'+i+'" value="" maxlength="256"></div>');
+    $('#apk' + i).append('<div><label>path:</label><input id="path'+i+'" value="" maxlength="256"></div>');
+    $('#apk' + i).append('<div><label>version:</label><input id="version'+i+'" value="" maxlength="256"></div>');
+}
+
+function setInnerHtmlValue(i, pkg, path, version){
+    $('#pkg' + i).attr('value', pkg);
+    $('#path' + i).attr('value', path);
+    $('#version' + i).attr('value', version);
+}
+
+function isEmptyObject(obj){
+    for(var n in obj){return false} 
+    return true; 
 }
 
 function addApk(){
@@ -97,78 +154,11 @@ function generateJson(){
     if(isNormalQuit){
         result = confirm('Generate json now?')
         if (result){
-            changeArrayToJson(array);
+            data = changeArrayToJson(array);
+            alert ('Generation Successful!\n\nPress CTRL+A CTRL+C to copy the new json!');
         }
         else{
             return;
         }
     }
-}
-
-function changeArrayToJson(array){
-    var jsonObj = {};
-    var pkg = '';
-    var path = '';
-    var ver= '';
-
-    $.each(array,function(n,value) {  
-        mod = n%3;
-        switch(mod){
-            case 0: pkg = value;
-            case 1: path = value;
-            case 2: ver =value;
-                    jsonObj[pkg] = {};
-                    jsonObj[pkg]['path'] = path;
-                    jsonObj[pkg]['versionName'] = ver;
-        }
-    });
-    var json = JSON.stringify(jsonObj)
-    displayJsonToDom(json);
-    $.post("js/success.txt", json, function(data,status){
-        alert(data);
-    });
-}
-
-function displayJsonToDom(json){
-    $('body').empty();
-
-    jsonObj = JSON.parse(json);
-    var html = '{<br>'
-    for(var key in jsonObj){
-        html += '&nbsp;&nbsp;"' + key + '":{<br>';
-        attrObj = jsonObj[key];
-        path = attrObj['path'];
-        version = attrObj['versionName'];
-        html += '&nbsp;&nbsp;&nbsp;&nbsp;"path":"' + path + '",<br>'
-        html += '&nbsp;&nbsp;&nbsp;&nbsp;"versionName":"' + version + '"<br>'
-        html += '&nbsp;&nbsp;},<br>'
-    }
-    html = html.substring(0, html.length-5);
-    html += '<br>'
-    html += '}'
-
-    $('body').append(html);
-}
-
-function compareString(s1, s2){
-    console.log(s1,s2);
-    return (s1 != s2) ? true : false;
-}
-
-function addApkInnerHtml(i){
-    $('#apkInfo').append('<p id="apk'+i+'"></p>');
-    $('#apk' + i).append('<div><label>Package name: </label><input id="pkg'+i+'" value="" maxlength="256"></div>');
-    $('#apk' + i).append('<div><label>path:</label><input id="path'+i+'" value="" maxlength="256"></div>');
-    $('#apk' + i).append('<div><label>version:</label><input id="version'+i+'" value="" maxlength="256"></div>');
-}
-
-function setInnerHtmlValue(i, pkg, path, version){
-    $('#pkg' + i).attr('value', pkg);
-    $('#path' + i).attr('value', path);
-    $('#version' + i).attr('value', version);
-}
-
-function isEmptyObject(obj){
-    for(var n in obj){return false} 
-    return true; 
 }

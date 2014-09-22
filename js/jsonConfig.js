@@ -1,4 +1,4 @@
-{
+var json= {
   "阿叔的xxxxxxx":{
     "path":"阿叔的",
     "versionName":"阿叔的"
