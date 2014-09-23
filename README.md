@@ -1,6 +1,8 @@
 PortingChecker
 ==============
 
+git clone -b pygui git@git.oschina.net:tanying/otscli.git
+
 For checking the accuracy of porting applications
 
 配置文件: 
