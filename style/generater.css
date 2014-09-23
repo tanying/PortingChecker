@@ -30,6 +30,7 @@
 
 #apkInfo p div input {
     display: block;
+    width: 500px;
     float: left;
 }
 
@@ -39,7 +40,7 @@
 }
 
 .delete {
-    margin-left: 265px;
+    margin-left: 565px;
 }
 
 #generate {

@@ -22,7 +22,24 @@ def is_argument_in_dataset(argument, dataset, ignore_case = False):
         else:
             if argument == item:
                 return True
-    return False 
+    return False
+
+def change_list_to_json(list):
+    string = '{\n'
+
+    for item in list:
+        package = item[0]
+        path = item [1]
+        version = item[2]
+
+        string += '  "%s":{\n    "path":"%s",\n    "versionName":"%s"\n  },\n' % (package, path, version)
+
+    string = string[:-2]
+    string += '\n}'
+
+    fOut = open(config.STANDARD_GMS_FILE, 'w')
+    fOut.write(string)
+    fOut.close()
 
 def compare_string(s1, s2):
     return (s1 == s2) and True or False

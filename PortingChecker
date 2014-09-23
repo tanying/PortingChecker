@@ -7,6 +7,7 @@ __author__ = 'Tan Ying<ying.tan@tcl.com>'
 import os
 import sys
 import getopt
+import commands
 from utils import *
 
 logger = log.getLogging('PortingChecker')
@@ -15,8 +16,8 @@ def get_confirm_result(string):
     return (string.lower() == 'y' or string.lower() == 'yes') and True or False
 
 def confirm_html_gen_over(filepath):
-    print 'If already, Open the corresponding path now?'
-    gen_over = raw_input('press y(yes), else(no) \n')
+    print 'If already, Open the corresponding file now?'
+    gen_over = raw_input('press y(yes), else(exit) \n')
 
     if get_confirm_result(gen_over):
         print 'If already, Press CTRL+C to exit'
@@ -25,27 +26,49 @@ def confirm_html_gen_over(filepath):
     else:
         print 'Please copy the json to the corresponding path!'
 
-def get_apk_version(dir):
+def get_apk_version(dir, apk_info_list, is_pre):
     for root,dirnames,filenames in os.walk(dir):
         for file in filenames:
-            aapt_str = os.system('aapt dump badging %s | grep version' % file)
-            
-            # name_left = aapt_str.find('name')
-            # name_right = aapt_str.find(' versionCode') - 1
-            # name = aapt_str[name_left, name_right]
 
-            # version_left = aapt_str.find('versionName')
-            # version = aapt_str[version_left:]
+            filepath = dir + file
+            command = 'aapt dump badging %s | grep version' % filepath
+            status, output = commands.getstatusoutput(command)
+            aapt_str = output.strip()
+
+            name_left = aapt_str.find('name')+6 #{name='}
+            name_right = aapt_str.find(' versionCode') - 2
+            name = aapt_str[name_left:name_right]
+
+            version_left = aapt_str.find('versionName')+13 #{versionName='}
+            version = aapt_str[version_left:-1] 
+
+            if is_pre:
+                path = '/custpack/app/unremoveable/priv-app/' + file
+            else:
+                path = '/custpack/app/unremoveable/' + file
+
+            apk_item = []
+            apk_item.append(name)
+            apk_item.append(path)
+            apk_item.append(version)
+            apk_item = tuple(apk_item)
+            print apk_item
+
+            apk_info_list.append(apk_item)
 
 def generate_gmsjson_from_dir(dir):
-    gms_dir = dir + '/custo_wimdata_ng/wcustores/App/Unremoveable/GMS'
-    gms_pri_dir = dir + '/custo_wimdata_ng/wcustores/App/Unremoveable/GMS-pri'
+    gms_dir = dir + '/custo_wimdata_ng/wcustores/App/Unremoveable/GMS/'
+    gms_pri_dir = dir + '/custo_wimdata_ng/wcustores/App/Unremoveable/GMS_pri/'
 
-    print gms_dir 
-    #travel the directory to get the demand information
-    get_apk_version(gms_pri_dir)
+    if os.path.exists(gms_pri_dir) and os.path.exists(gms_pri_dir):
+        #travel the directory to get the demand information
+        apk_info_list = []
+        get_apk_version(gms_pri_dir, apk_info_list, True)
+        get_apk_version(gms_dir, apk_info_list, False)
 
-    
+        change_list_to_json(apk_info_list)
+    else:
+        raise PortingCheckerError('Invalid directory')
 
 def main():
     """
@@ -73,7 +96,7 @@ def main():
         else:
             print INVALID_CONFIG_ARGUMENT
     else:
-        start_checking()    
+        start_checking()
 
 def check_handler(standard_dict, path_dict):
     diff_dict = {}
