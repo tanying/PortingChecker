@@ -1,7 +1,7 @@
 PortingChecker
 ==============
 For checking the accuracy of porting applications
-用来检查应用预置的应用是否符合预期.
+用来检查预置的应用是否符合预期.
 
 获取文件:
     https://github.com/tanying/PortingChecker/archive/pygui.zip
