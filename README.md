@@ -1,9 +1,13 @@
 PortingChecker
 ==============
-
-git clone -b pygui git@git.oschina.net:tanying/otscli.git
-
 For checking the accuracy of porting applications
+用来检查应用预置的应用是否符合预期.
+
+获取文件:
+    https://github.com/tanying/PortingChecker/archive/pygui.zip
+
+    或者通过git:
+    git clone -b pygui git@git.oschina.net:tanying/otscli.git
 
 配置文件: 
     config/3rd.json 键和值必须用双引号包含,不得用单引号
@@ -15,8 +19,20 @@ For checking the accuracy of porting applications
  
 启动比较:
     python PortingChecker
+
 修改配置文件:
-   python PortingChecker --config gms
-   python PortingChecker --config 3rd
-   
-http://pydoc.org/2.2.3/SimpleHTTPServer.html
+    python PortingChecker --gen gms.json
+    python PortingChecker --gen 3rd.json
+
+    通过运行本条命令只会载入需要进行修改的json文件,并在html页面生成修改后的json.
+    真正的改动json操作需要手动copy已经生成好的页面json到config目录下.
+    
+通过gms文件夹生成gms.json
+    python PortingChecker --gen gmsdir
+
+    Please input the Project directory path: 输入包含GMS和GMS_pri的文件夹
+    例如:
+    /local/android/soul4/custo_wimdata_ng/wcustores/App/Unremoveable
+
+
+
