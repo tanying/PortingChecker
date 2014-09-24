@@ -19,6 +19,7 @@ For checking the accuracy of porting applications
  
 启动比较:
     python PortingChecker
+    pc需要连上手机
 
 修改配置文件:
     python PortingChecker --gen gms.json
