@@ -57,8 +57,11 @@ def get_apk_version(dir, apk_info_list, is_pre):
             apk_info_list.append(apk_item)
 
 def generate_gmsjson_from_dir(dir):
-    gms_dir = dir + '/custo_wimdata_ng/wcustores/App/Unremoveable/GMS/'
-    gms_pri_dir = dir + '/custo_wimdata_ng/wcustores/App/Unremoveable/GMS_pri/'
+    # gms_dir = dir + '/custo_wimdata_ng/wcustores/App/Unremoveable/GMS/'
+    # gms_pri_dir = dir + '/custo_wimdata_ng/wcustores/App/Unremoveable/GMS_pri/'
+
+    gms_dir = dir + '/GMS/'
+    gms_pri_dir = dir + '/GMS_pri/'
 
     if os.path.exists(gms_pri_dir) and os.path.exists(gms_pri_dir):
         #travel the directory to get the demand information
