@@ -1,4 +1,4 @@
 *.pyc
 *.log
 /bin
-/output/*
+/output
