@@ -24,7 +24,7 @@ def is_argument_in_dataset(argument, dataset, ignore_case = False):
                 return True
     return False
 
-def change_list_to_json(list):
+def change_list_to_json(list, file):
     string = '{\n'
 
     for item in list:
@@ -37,7 +37,7 @@ def change_list_to_json(list):
     string = string[:-2]
     string += '\n}'
 
-    fOut = open(config.STANDARD_GMS_FILE, 'w')
+    fOut = open(file, 'w')
     fOut.write(string)
     fOut.close()
 
