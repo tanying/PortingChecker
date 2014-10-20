@@ -61,7 +61,7 @@ def generate_json_from_dir(directory, file):
     # gms_pri_dir = dir + '/custo_wimdata_ng/wcustores/App/Unremoveable/GMS_pri/'
     apk_info_list = []
 
-    if directory[-1] == '/'
+    if directory[-1] == '/':
         directory = directory[:-1]
     pri_directory = directory + '_pri/'
 
