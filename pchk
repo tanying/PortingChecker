@@ -7,7 +7,6 @@ __author__ = 'Tan Ying<ying.tan@tcl.com>'
 import os
 import sys
 import getopt
-import commands
 from utils import *
 
 logger = log.getLogging('PortingChecker')
@@ -32,7 +31,7 @@ def get_apk_version(dir, apk_info_list, is_priv):
 
             filepath = dir + file
             command = 'aapt dump badging %s | grep version' % filepath
-            status, output = commands.getstatusoutput(command)
+            status = os.system(command)
             aapt_str = output.strip()
 
             name_left = aapt_str.find('name')+6 #{name='}
@@ -77,23 +76,25 @@ def generate_json_from_dir(directory, file):
 def main():
     """
     The entrance of Porting Checker
+    检查工具的入口
     """
     try:
-    #getopt方法会自动过滤参数中的引号;为保持统一，对参数的处理默认会过滤掉引号
+        #--gen选项用于生成json文件, --gen所跟参数只可以是3rd.json和gms.json或者dir <localpath>
         opts, args = getopt.getopt(sys.argv[1:], '', ['gen='])
     except getopt.GetoptError, e: 
         print e
         sys.exit(1)
 
-    if opts:
-        #opts[0] = [('--config', 'gms')]
+    if opts:#有选项的情况:生成json
+        #opts[0] = [('--config', 'gms.json')]
         if is_argument_in_dataset(opts[0][1], CONFIG_SET):
-        # start config html
+            #启动生成json的html文件
             filepath = 'config/' + opts[0][1]
             js_filepath = config.STANDARD_JSON_CONFIG_JS
             if generate_config_jsfile(filepath, js_filepath):
+                #用firefox打开html文件
                 os.system('firefox %s' % HTML_GENERATER)
-                #confirm_html_gen_over(filepath)    
+        #不提供方法的接口    
         elif opts[0][1] == 'dir' and len(args) == 2:
             # args[0]: path, args[1]: filename
             project_dir = args[0]
@@ -101,10 +102,13 @@ def main():
             generate_json_from_dir(project_dir, filename)
         else:
             print INVALID_CONFIG_ARGUMENT
-    else:
+    else:#无选项的情况:依照json进行检查
         start_checking()
 
 def check_handler(standard_dict, path_dict):
+    """
+    按照标准字典检查手机中的信息
+    """
     diff_dict = {}
 
     for pkg in standard_dict:
@@ -158,21 +162,26 @@ def check_handler(standard_dict, path_dict):
     return diff_dict
 
 def start_checking():
-    # The standard_dict for comparation, transfered form standard.json
+    """
+    检查手机中的apk是否按照3rd.json和gsm.json进行预置.
+    """
+    #标准的json模板, 如果不存在这两个文件,则报错退出
     if not (os.path.isfile(STANDARD_3RD_FILE) and os.path.isfile(STANDARD_GMS_FILE)):
         #raise PortingCheckerError('Not found the 3rd.json or gms.json')
         print 'Error: Not found the 3rd.json or gms.json'
         sys.exit(1)
     else:
+    #将两个文件合并
         third_dict = get_standard_pkg_config(STANDARD_3RD_FILE)
         gms_dict = get_standard_pkg_config(STANDARD_GMS_FILE)
+        #将3rd的dict和gms的dict合并成一个dict
         standard_dict = merge_dict(third_dict, gms_dict)
 
     #Get the path_dict from phone
     command = 'adb shell pm list packages -f > %s' % PATH_FILE
     try:
-        status, output = commands.getstatusoutput(command)
-        if status == 0:
+        status = os.system(command)
+        if status == 0:#正常获取到path列表文件
             if os.path.isfile(config.PATH_FILE):
                 path_dict = get_pkg_path_dict()
             else:
@@ -181,9 +190,9 @@ def start_checking():
             logger.debug('pkg path dict:%s' % path_dict)
             logger.debug('third party path dict:%s' % path_dict)
             logger.debug('gms path dict:%s' % path_dict)
-            # get the difference dict
+            #获取difference dict
             diff_dict = check_handler(standard_dict, path_dict)
-            # displace diff_dict in compare_result.txt
+            #将diff_dict显示为compare_result.txt
             result_string = ''
             for pkg in diff_dict:
                 info = diff_dict[pkg]

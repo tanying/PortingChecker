@@ -7,7 +7,6 @@ import sys
 import log
 import json
 import config
-import commands
 
 logger = log.getLogging('utils.py')
 
@@ -66,7 +65,7 @@ def get_path_from_phone():
 
 def get_version_from_phone(pkg_name):
     command = 'adb shell pm dump %s|grep versionName'
-    status, output = commands.getstatusoutput(command % pkg_name)
+    status = os.system(command % pkg_name)
     versionName = output.strip()
     index = versionName.find('=') + 1
     version = versionName[index:]
@@ -96,6 +95,9 @@ def get_pkg_path_dict():
     return pkg_dict
 
 def generate_config_jsfile(path, js_path):
+    """
+    载入json文件,并生成js文件,用于导入html
+    """
     fIn = open(path, 'r')
     lines = fIn.read()
     fIn.close()

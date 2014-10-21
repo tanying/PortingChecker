@@ -22,7 +22,8 @@ For checking the accuracy of porting applications
  
 ## 启动比较:
     python pchk
-    pc需要连上手机, 
+    pc需要连上手机, USB调试已打开
+    需要保证config目录下有3rd.json和gms.json两个文件
 
 ## 修改配置文件:
     python pchk --gen gms.json
@@ -32,7 +33,7 @@ For checking the accuracy of porting applications
     真正的改动json操作需要手动copy已经生成好的页面json到config目录下.
     
 ## 通过gms文件夹生成gms.json
-    python pchk --gen gmsdir
+    python pchk --gen dir
 
     Please input the Project directory path: 输入包含GMS和GMS_pri的文件夹
     例如:
