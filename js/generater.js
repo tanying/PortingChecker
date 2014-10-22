@@ -16,8 +16,9 @@ function displayExistJsonOnDom(data){
         attrObj = jsonObj[key];
         path = attrObj['path'];
         version = attrObj['versionName'];
+        perso = attrObj['perso'];
 
-        setInnerHtmlValue(count, key, path, version);
+        setInnerHtmlValue(count, key, path, version, perso);
         count++;
     }
 
@@ -31,17 +32,20 @@ function changeArrayToJson(array){
     var jsonObj = {};
     var pkg = '';
     var path = '';
-    var ver= '';
+    var ver = '';
+    var perso = '';
 
     $.each(array,function(n,value) {  
-        mod = n%3;
+        mod = n%4;
         switch(mod){
             case 0: pkg = value;
             case 1: path = value;
-            case 2: ver =value;
+            case 2: ver = value;
+            case 3: perso = value;
                     jsonObj[pkg] = {};
                     jsonObj[pkg]['path'] = path;
                     jsonObj[pkg]['versionName'] = ver;
+                    jsonObj[pkg]['perso'] = perso;
         }
     });
     var data = JSON.stringify(jsonObj)
@@ -50,7 +54,6 @@ function changeArrayToJson(array){
 
 function displayJsonToDom(data){
     $('body').empty();
-
     jsonObj = JSON.parse(data);
     var html = '{<br>'
     for(var key in jsonObj){
@@ -58,8 +61,10 @@ function displayJsonToDom(data){
         attrObj = jsonObj[key];
         path = attrObj['path'];
         version = attrObj['versionName'];
+        perso = attrObj['perso']
         html += '&nbsp;&nbsp;&nbsp;&nbsp;"path":"' + path + '",<br>'
         html += '&nbsp;&nbsp;&nbsp;&nbsp;"versionName":"' + version + '"<br>'
+        html += '&nbsp;&nbsp;&nbsp;&nbsp;"perso":"' + perso + '",<br>'
         html += '&nbsp;&nbsp;},<br>'
     }
     html = html.substring(0, html.length-5);
@@ -83,15 +88,17 @@ function addApkInnerHtml(i){
     $('#apk' + i).append('<div><label>Package name: </label><input id="pkg'+i+'" value="" maxlength="256"></div>');
     $('#apk' + i).append('<div><label>path:</label><input id="path'+i+'" value="" maxlength="256"></div>');
     $('#apk' + i).append('<div><label>version:</label><input id="version'+i+'" value="" maxlength="256"></div>');
+    $('#apk' + i).append('<div><label>perso:</label><input id="perso'+i+'" value="" maxlength="256"></div>');
 
     $('#apk' + i).append('<button id="del' + i +'" class="delete">delete apk</button>');
     $('#del' + i).bind('click', deleteApk);
 }
 
-function setInnerHtmlValue(i, pkg, path, version){
+function setInnerHtmlValue(i, pkg, path, version, perso){
     $('#pkg' + i).attr('value', pkg);
     $('#path' + i).attr('value', path);
     $('#version' + i).attr('value', version);
+    $('#perso' + i).attr('value', perso);
 }
 
 function isEmptyObject(obj){
@@ -105,7 +112,8 @@ function addApk(){
         pkgname = $('#pkg' + j).val();
         path = ($('#path' + j).val());
         version = ($('#version' + j).val());
-        if (pkgname && path && version){
+        perso = ($('#perso' + j).val());
+        if (pkgname && path && version && perso){
             k = j - 1
             if(k >= 0){
                 pre_pkgname = $('#pkg' + k).val();
@@ -115,7 +123,7 @@ function addApk(){
                 r2 = compareString(path, pre_path);
                 r3 = compareString(version, pre_version);
                 if (r1 && r2 && r3){
-                    setInnerHtmlValue(j, pkgname, path, version);
+                    setInnerHtmlValue(j, pkgname, path, version, perso);
                     addApkInnerHtml(count);
                     count++;
                 }
@@ -124,13 +132,13 @@ function addApk(){
                 }
             }
             else{
-                setInnerHtmlValue(j, pkgname, path, version);
+                setInnerHtmlValue(j, pkgname, path, version, perso);
                 addApkInnerHtml(count);
                 count++;
             }
         }
         else{
-            alert('Please fill pkgname, path and version!');
+            alert('Please fill pkgname, path, version and perso!');
         }
     }
     else{

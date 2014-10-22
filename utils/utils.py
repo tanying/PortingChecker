@@ -7,6 +7,7 @@ import sys
 import log
 import json
 import config
+import commands
 
 logger = log.getLogging('utils.py')
 
@@ -65,7 +66,7 @@ def get_path_from_phone():
 
 def get_version_from_phone(pkg_name):
     command = 'adb shell pm dump %s|grep versionName'
-    status = os.system(command % pkg_name)
+    status, output = commands.getstatusoutput(command)
     versionName = output.strip()
     index = versionName.find('=') + 1
     version = versionName[index:]

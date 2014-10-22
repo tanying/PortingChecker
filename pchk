@@ -7,6 +7,7 @@ __author__ = 'Tan Ying<ying.tan@tcl.com>'
 import os
 import sys
 import getopt
+import commands
 from utils import *
 
 logger = log.getLogging('PortingChecker')
@@ -31,7 +32,7 @@ def get_apk_version(dir, apk_info_list, is_priv):
 
             filepath = dir + file
             command = 'aapt dump badging %s | grep version' % filepath
-            status = os.system(command)
+            status, output = commands.getstatusoutput(command)
             aapt_str = output.strip()
 
             name_left = aapt_str.find('name')+6 #{name='}
