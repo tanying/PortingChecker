@@ -8,9 +8,10 @@ import os
 import sys
 import getopt
 import commands
+import shutil
 from utils import *
 
-logger = log.getLogging('PortingChecker')
+logger = getLogging('pchk')
 
 def get_confirm_result(string):
     return (string.lower() == 'y' or string.lower() == 'yes') and True or False
@@ -26,10 +27,18 @@ def confirm_html_gen_over(filepath):
     else:
         print 'Please copy the json to the corresponding path!'
 
-def get_apk_version(dir, apk_info_list, is_priv):
+def is_withlib_or_withoutlib(filepath):
+    status = os.system('unzip -l %s | grep lib/' % filepath)
+
+    if status == 0:
+        return True
+    else:
+        return False
+
+def get_versions(dir, apk_info_list, is_priv):
     for root,dirnames,filenames in os.walk(dir):
         for file in filenames:
-
+            perso = get_perso_attr(dir)
             filepath = dir + file
             command = 'aapt dump badging %s | grep version' % filepath
             status, output = commands.getstatusoutput(command)
@@ -42,15 +51,21 @@ def get_apk_version(dir, apk_info_list, is_priv):
             version_left = aapt_str.find('versionName')+13 #{versionName='}
             version = aapt_str[version_left:-1]
 
+            is_withlib = is_withlib_or_withoutlib(filepath)
+
             if is_priv:
                 path = '/custpack/app/unremoveable/priv-app/' + file
             else:
-                path = '/custpack/app/unremoveable/' + file
+                if is_withlib:
+                    path = '/custpack/app/unremoveable/withlib/' + file
+                else:
+                    path = '/custpack/app/unremoveable/withoutlib/' + file
 
             apk_item = []
             apk_item.append(name)
             apk_item.append(path)
             apk_item.append(version)
+            apk_item.append(perso)
             apk_item = tuple(apk_item)
             print apk_item
 
@@ -61,14 +76,19 @@ def generate_json_from_dir(directory, file):
     # gms_pri_dir = dir + '/custo_wimdata_ng/wcustores/App/Unremoveable/GMS_pri/'
     apk_info_list = []
 
-    if directory[-1] == '/':
-        directory = directory[:-1]
-    pri_directory = directory + '_pri/'
+    if directory[-1] != '/':
+        directory = directory + '/'
 
-    if os.path.exists(directory) and os.path.exists(pri_directory):
+    if directory[-4:] == 'pri':
+        is_pri = True
+    else:
+        is_pri = False
+
+    if os.path.exists(directory):
         #travel the directory to get the demand information
-        get_apk_version(pri_directory, apk_info_list, True)
-        get_apk_version(directory, apk_info_list, False)
+        get_versions(directory, apk_info_list, is_pri)
+
+        logger.debug(apk_info_list)
 
         change_list_to_json(apk_info_list, file)
     else:

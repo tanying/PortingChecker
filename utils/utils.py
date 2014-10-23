@@ -31,8 +31,9 @@ def change_list_to_json(list, file):
         package = item[0]
         path = item [1]
         version = item[2]
+        perso = item[3]
 
-        string += '  "%s":{\n    "path":"%s",\n    "versionName":"%s"\n  },\n' % (package, path, version)
+        string += '  "%s":{\n    "path":"%s",\n    "versionName":"%s",\n    "perso":"%s"\n},\n' % (package, path, version, perso)
 
     string = string[:-2]
     string += '\n}'
@@ -40,6 +41,17 @@ def change_list_to_json(list, file):
     fOut = open(file, 'w')
     fOut.write(string)
     fOut.close()
+
+def get_perso_attr(dir):
+    dir = dir.lower()
+    if dir[-4:-1] == 'gms' or dir[-8:-1] == 'gms_pri':
+        return 'gms'
+    elif dir[-8:-1] == 'tmobile' or dir[-12:-1] == 'tmobile_pri':
+        return 'tmo'
+    elif dir[-9:-1] == 'metropcs' or dir[-13:-1] == 'metropcs_pri':
+        return 'mps'
+    else:
+        return 'all'
 
 def compare_string(s1, s2):
     return (s1 == s2) and True or False
