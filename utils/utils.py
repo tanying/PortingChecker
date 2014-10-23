@@ -25,18 +25,20 @@ def is_argument_in_dataset(argument, dataset, ignore_case = False):
     return False
 
 def change_list_to_json(list, file):
-    string = '{\n'
+    string = ''
+    if len(list) > 0:
+        string = '{\n'
 
-    for item in list:
-        package = item[0]
-        path = item [1]
-        version = item[2]
-        perso = item[3]
+        for item in list:
+            package = item[0]
+            path = item [1]
+            version = item[2]
+            perso = item[3]
 
-        string += '  "%s":{\n    "path":"%s",\n    "versionName":"%s",\n    "perso":"%s"\n},\n' % (package, path, version, perso)
+            string += '  "%s":{\n    "path":"%s",\n    "versionName":"%s",\n    "perso":"%s"\n  },\n' % (package, path, version, perso)
 
-    string = string[:-2]
-    string += '\n}'
+        string = string[:-2]
+        string += '\n}'
 
     fOut = open(file, 'w')
     fOut.write(string)

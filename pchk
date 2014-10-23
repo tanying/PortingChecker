@@ -38,38 +38,39 @@ def is_withlib_or_withoutlib(filepath):
 def get_versions(dir, apk_info_list, is_priv):
     for root,dirnames,filenames in os.walk(dir):
         for file in filenames:
-            perso = get_perso_attr(dir)
-            filepath = dir + file
-            command = 'aapt dump badging %s | grep version' % filepath
-            status, output = commands.getstatusoutput(command)
-            aapt_str = output.strip()
+            if file[-4:] == '.apk':
+                perso = get_perso_attr(dir)
+                filepath = dir + file
+                command = 'aapt dump badging %s | grep version' % filepath
+                status, output = commands.getstatusoutput(command)
+                aapt_str = output.strip()
 
-            name_left = aapt_str.find('name')+6 #{name='}
-            name_right = aapt_str.find(' versionCode') - 2
-            name = aapt_str[name_left:name_right]
+                name_left = aapt_str.find('name')+6 #{name='}
+                name_right = aapt_str.find(' versionCode') - 2
+                name = aapt_str[name_left:name_right]
 
-            version_left = aapt_str.find('versionName')+13 #{versionName='}
-            version = aapt_str[version_left:-1]
+                version_left = aapt_str.find('versionName')+13 #{versionName='}
+                version = aapt_str[version_left:-1]
 
-            is_withlib = is_withlib_or_withoutlib(filepath)
+                is_withlib = is_withlib_or_withoutlib(filepath)
 
-            if is_priv:
-                path = '/custpack/app/unremoveable/priv-app/' + file
-            else:
-                if is_withlib:
-                    path = '/custpack/app/unremoveable/withlib/' + file
+                if is_priv:
+                    path = '/custpack/app/unremoveable/priv-app/' + file
                 else:
-                    path = '/custpack/app/unremoveable/withoutlib/' + file
+                    if is_withlib:
+                        path = '/custpack/app/unremoveable/withlib/' + file
+                    else:
+                        path = '/custpack/app/unremoveable/withoutlib/' + file
 
-            apk_item = []
-            apk_item.append(name)
-            apk_item.append(path)
-            apk_item.append(version)
-            apk_item.append(perso)
-            apk_item = tuple(apk_item)
-            print apk_item
+                apk_item = []
+                apk_item.append(name)
+                apk_item.append(path)
+                apk_item.append(version)
+                apk_item.append(perso)
+                apk_item = tuple(apk_item)
+                print apk_item
 
-            apk_info_list.append(apk_item)
+                apk_info_list.append(apk_item)
 
 def generate_json_from_dir(directory, file):
     apk_info_list = []
@@ -77,7 +78,7 @@ def generate_json_from_dir(directory, file):
     if directory[-1] != '/':
         directory = directory + '/'
 
-    if directory[-4:] == 'pri':
+    if directory[-4:-1] == 'pri':
         is_pri = True
     else:
         is_pri = False
@@ -127,16 +128,21 @@ def main():
     except (EOFError, KeyboardInterrupt):
         print HINT_EXIT
         sys.exit(1)
+    except Exception, e:
+        print e
+        sys.exit(1)
 
 def check_handler(standard_dict, path_dict, perso_list):
     """
     按照标准字典检查手机中的信息
     """
     diff_dict = {}
-
+    logger.debug(standard_dict)
     for pkg in standard_dict:
         # 判断pkg是否是需要判断的perso
-        if is_argument_in_dataset(pkg['perso'], perso_list, True):
+        logger.info(pkg)
+        logger.info(standard_dict[pkg])
+        if is_argument_in_dataset(standard_dict[pkg]['perso'], perso_list, True):
             print 'Checking %s now...' % pkg
             diff_dict[pkg] = {}
 
@@ -199,6 +205,8 @@ def start_checking(args):
         is_confirm = raw_input('You mean check all? Press y(Yes) to confirm:')
         if is_confirm.lower() == 'y':
             perso_list = PERSO_LIST
+        else:
+            sys.exit(1)
 
     #标准的json模板, 如果不存在这两个文件,则报错退出
     if not (os.path.isfile(STANDARD_3RD_FILE) and os.path.isfile(STANDARD_GMS_FILE)):
@@ -259,5 +267,3 @@ def start_checking(args):
 
 if __name__ == '__main__':
     main()
-
-
