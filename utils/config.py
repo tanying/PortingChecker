@@ -19,3 +19,4 @@ INVALID_CONFIG_ARGUMENT = '--gen can only follow one of the next 3 parameters:3r
 HTML_GENERATER = 'generater.html'
 HINT_UNCONNECTED_USB = 'Please connect the Phone with PC by USB.'
 HINT_EXIT = 'You have exit, bye!'
+PERSO_LIST = ['all', 'tmo', 'mps']

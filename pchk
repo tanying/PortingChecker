@@ -104,79 +104,85 @@ def main():
         print e
         sys.exit(1)
 
-    if opts:#有选项的情况:生成json
-        #opts[0] = [('--config', 'gms.json')]
-        if is_argument_in_dataset(opts[0][1], CONFIG_SET):
-            #启动生成json的html文件
-            filepath = 'config/' + opts[0][1]
-            js_filepath = config.STANDARD_JSON_CONFIG_JS
-            if generate_config_jsfile(filepath, js_filepath):
-                #用firefox打开html文件
-                os.system('firefox %s' % HTML_GENERATER)
-        #不提供方法的接口    
-        elif opts[0][1] == 'dir' and len(args) == 2:
-            # args[0]: path, args[1]: filename
-            project_dir = args[0]
-            filename = args[1]
-            generate_json_from_dir(project_dir, filename)
-        else:
-            print INVALID_CONFIG_ARGUMENT
-    else:#无选项的情况:依照json进行检查
-        start_checking(args)
+    try:
+        if opts:#有选项的情况:生成json
+            #opts[0] = [('--config', 'gms.json')]
+            if is_argument_in_dataset(opts[0][1], CONFIG_SET):
+                #启动生成json的html文件
+                filepath = 'config/' + opts[0][1]
+                js_filepath = config.STANDARD_JSON_CONFIG_JS
+                if generate_config_jsfile(filepath, js_filepath):
+                    #用firefox打开html文件
+                    os.system('firefox %s' % HTML_GENERATER)
+            #不提供方法的接口    
+            elif opts[0][1] == 'dir' and len(args) == 2:
+                # args[0]: path, args[1]: filename
+                project_dir = args[0]
+                filename = args[1]
+                generate_json_from_dir(project_dir, filename)
+            else:
+                print INVALID_CONFIG_ARGUMENT
+        else:#无选项的情况:依照json进行检查
+            start_checking(args)
+    except (EOFError, KeyboardInterrupt):
+        print HINT_EXIT
+        sys.exit(1)
 
-def check_handler(standard_dict, path_dict):
+def check_handler(standard_dict, path_dict, perso_list):
     """
     按照标准字典检查手机中的信息
     """
     diff_dict = {}
 
     for pkg in standard_dict:
-        print 'Checking %s now...' % pkg
-        diff_dict[pkg] = {}
+        # 判断pkg是否是需要判断的perso
+        if is_argument_in_dataset(pkg['perso'], perso_list, True):
+            print 'Checking %s now...' % pkg
+            diff_dict[pkg] = {}
 
-        if path_dict.has_key(pkg):
-            # compare path
-            pkg_path = path_dict[pkg]
-            if standard_dict[pkg].has_key('path'):
-                result = compare_string(standard_dict[pkg]['path'], pkg_path)
-                if not result:
-                    diff_dict[pkg]['pkg_path'] = pkg_path
-                    diff_dict[pkg]['standard_path'] = standard_dict[pkg]['path']
-                    print '    Different path,'
-                    print '        standard_path: %s' % standard_dict[pkg]['path']
-                    print '        pkg_path: %s' % pkg_path
+            if path_dict.has_key(pkg):
+                # compare path
+                pkg_path = path_dict[pkg]
+                if standard_dict[pkg].has_key('path'):
+                    result = compare_string(standard_dict[pkg]['path'], pkg_path)
+                    if not result:
+                        diff_dict[pkg]['pkg_path'] = pkg_path
+                        diff_dict[pkg]['standard_path'] = standard_dict[pkg]['path']
+                        print '    Different path,'
+                        print '        standard_path: %s' % standard_dict[pkg]['path']
+                        print '        pkg_path: %s' % pkg_path
+                    else:
+                        print '    Equal path'
                 else:
-                    print '    Equal path'
-            else:
-                #raise StandardJsonError('Package:%s lack versionName in standard.json')
-                print 'Error: %s lack versionName in standard.json' % pkg
-                sys.exit(1)
+                    #raise StandardJsonError('Package:%s lack versionName in standard.json')
+                    print 'Error: %s lack versionName in standard.json' % pkg
+                    sys.exit(1)
 
-            pkg_version = get_version_from_phone(pkg)
-            if not pkg_version:
-                pkg_version = ''
+                pkg_version = get_version_from_phone(pkg)
+                if not pkg_version:
+                    pkg_version = ''
 
-            # compare version
-            if standard_dict[pkg].has_key('versionName'):
-                result = compare_string(standard_dict[pkg]['versionName'], pkg_version)
-                if not result:
-                    diff_dict[pkg]['pkg_version'] = pkg_version
-                    diff_dict[pkg]['standard_verison'] = standard_dict[pkg]['versionName']
-                    print '    Different versionName,'
-                    print '        standard_verison: %s' % standard_dict[pkg]['versionName']
-                    print '        pkg_version: %s' % pkg_version
+                # compare version
+                if standard_dict[pkg].has_key('versionName'):
+                    result = compare_string(standard_dict[pkg]['versionName'], pkg_version)
+                    if not result:
+                        diff_dict[pkg]['pkg_version'] = pkg_version
+                        diff_dict[pkg]['standard_verison'] = standard_dict[pkg]['versionName']
+                        print '    Different versionName,'
+                        print '        standard_verison: %s' % standard_dict[pkg]['versionName']
+                        print '        pkg_version: %s' % pkg_version
 
+                    else:
+                        print '    Equal version'
                 else:
-                    print '    Equal version'
-            else:
-                #raise StandardJsonError('Package:%s lack versionName in standard.json' % pkg)
-                print 'Error: %s lack versionName in standard.json' % pkg
-                sys.exit(1)
+                    #raise StandardJsonError('Package:%s lack versionName in standard.json' % pkg)
+                    print 'Error: %s lack versionName in standard.json' % pkg
+                    sys.exit(1)
 
-        else:
-            #out put error msg
-            print '    Package not porting.'
-            diff_dict[pkg]['info'] = 'Package not porting.'
+            else:
+                #out put error msg
+                print '    Package not porting.'
+                diff_dict[pkg]['info'] = 'Package not porting.'
 
     return diff_dict
 
@@ -184,6 +190,16 @@ def start_checking(args):
     """
     检查手机中的apk是否按照3rd.json和gsm.json进行预置.
     """
+    logger.debug('perso list:%s' % args)
+    if len(args) > 0:
+        perso_list = ['all']
+        perso_list = perso_list + args
+    else:
+        print 'Please add perso parameter: tmo(TMobile), mps(MetroPCS))'
+        is_confirm = raw_input('You mean check all? Press y(Yes) to confirm:')
+        if is_confirm.lower() == 'y':
+            perso_list = PERSO_LIST
+
     #标准的json模板, 如果不存在这两个文件,则报错退出
     if not (os.path.isfile(STANDARD_3RD_FILE) and os.path.isfile(STANDARD_GMS_FILE)):
         #raise PortingCheckerError('Not found the 3rd.json or gms.json')
@@ -210,7 +226,7 @@ def start_checking(args):
             logger.debug('third party path dict:%s' % path_dict)
             logger.debug('gms path dict:%s' % path_dict)
             #获取difference dict
-            diff_dict = check_handler(standard_dict, path_dict)
+            diff_dict = check_handler(standard_dict, path_dict, perso_list)
             #将diff_dict显示为compare_result.txt
             result_string = ''
             for pkg in diff_dict:
@@ -239,6 +255,7 @@ def start_checking(args):
             print(HINT_UNCONNECTED_USB)
     except (EOFError, KeyboardInterrupt):
         print HINT_EXIT
+        sys.exit(1)
 
 if __name__ == '__main__':
     main()

@@ -17,7 +17,7 @@ def is_argument_in_dataset(argument, dataset, ignore_case = False):
     """
     for item in dataset:
         if ignore_case:
-            if argument.upper() == item:
+            if argument.lower() == item.lower():
                 return True
         else:
             if argument == item:
