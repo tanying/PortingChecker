@@ -35,9 +35,18 @@ def is_withlib_or_withoutlib(filepath):
     else:
         return False
 
+def is_removeable_or_unremoveable(filepath):
+    if filepath.find('/Removeable/') > 0:
+        return 'removeable'
+    elif filepath.find('/Unremoveable/') > 0:
+        return 'unremoveable'
+    else:
+        raise PortingCheckerError('Invalid filepath!')
+
 def get_versions(dir, apk_info_list, is_priv):
     for root,dirnames,filenames in os.walk(dir):
         for file in filenames:
+            file = file.strip()
             if file[-4:] == '.apk':
                 perso = get_perso_attr(dir)
                 filepath = dir + file
@@ -52,15 +61,16 @@ def get_versions(dir, apk_info_list, is_priv):
                 version_left = aapt_str.find('versionName')+13 #{versionName='}
                 version = aapt_str[version_left:-1]
 
-                is_withlib = is_withlib_or_withoutlib(filepath)
+                is_removeable = is_removeable_or_unremoveable(filepath)
 
                 if is_priv:
-                    path = '/custpack/app/unremoveable/priv-app/' + file
+                    path = '/custpack/app/' + is_removeable + '/priv-app/' + file
                 else:
+                    is_withlib = is_withlib_or_withoutlib(filepath)
                     if is_withlib:
-                        path = '/custpack/app/unremoveable/withlib/' + file
+                        path = '/custpack/app/' + is_removeable + '/withlib/' + file
                     else:
-                        path = '/custpack/app/unremoveable/withoutlib/' + file
+                        path = '/custpack/app/' + is_removeable + '/withoutlib/' + file
 
                 apk_item = []
                 apk_item.append(name)

@@ -1,152 +1,222 @@
 {
-  "com.google.android.googlequicksearchbo":{
-    "path":"/custpack/app/unremoveable/priv-app/Velvet.apk",
-    "versionName":"3.5.16.1262550.arm",
-    "perso":"all"
-  },
   "com.android.faceloc":{
-    "path":"/custpack/app/unremoveable/FaceLock.apk",
-    "versionName":"4.4.2-1289630",
-    "perso":"all"
+    "path":"/custpack/app/unremoveable/withlib/FaceLock.apk",
+    "versionName":"4.4.4-1227136",
+    "perso":"gms"
   },
   "com.google.android.marvin.talkbac":{
-    "path":"/custpack/app/unremoveable/talkback.apk",
+    "path":"/custpack/app/unremoveable/withoutlib/talkback.apk",
     "versionName":"3.5.1",
-    "perso":"all"
+    "perso":"gms"
   },
   "com.google.android.tal":{
-    "path":"/custpack/app/unremoveable/Hangouts.apk",
-    "versionName":"2.1.311 (1231142-30)",
-    "perso":"all"
+    "path":"/custpack/app/unremoveable/withoutlib/Hangouts.apk",
+    "versionName":"2.1.317 (1328022-30)",
+    "perso":"gms"
   },
   "com.google.android.stree":{
-    "path":"/custpack/app/unremoveable/Street.apk",
+    "path":"/custpack/app/unremoveable/withoutlib/Street.apk",
     "versionName":"1.8.1.2",
-    "perso":"all"
+    "perso":"gms"
   },
   "com.google.android.inputmethod.lati":{
-    "path":"/custpack/app/unremoveable/LatinImeGoogle.apk",
-    "versionName":"3.0.19423.1102675a",
-    "perso":"all"
+    "path":"/custpack/app/unremoveable/withoutlib/LatinImeGoogle.apk",
+    "versionName":"3.1.19653.1284735",
+    "perso":"gms"
   },
   "com.google.android.video":{
-    "path":"/custpack/app/unremoveable/Videos.apk",
+    "path":"/custpack/app/unremoveable/withoutlib/Videos.apk",
     "versionName":"3.2.25",
-    "perso":"all"
+    "perso":"gms"
+  },
+  "com.google.android.kee":{
+    "path":"/custpack/app/unremoveable/withoutlib/Keep.apk",
+    "versionName":"2.3.02",
+    "perso":"gms"
   },
   "com.google.android.GoogleCamer":{
-    "path":"/custpack/app/unremoveable/GoogleCamera.apk",
-    "versionName":"2.2.024 (1195242-30)",
-    "perso":"all"
+    "path":"/custpack/app/unremoveable/withoutlib/GoogleCamera.apk",
+    "versionName":"2.3.019 (1271679-30)",
+    "perso":"gms"
   },
   "com.google.android.syncadapters.calenda":{
-    "path":"/custpack/app/unremoveable/GoogleCalendarSyncAdapter.apk",
+    "path":"/custpack/app/unremoveable/withoutlib/GoogleCalendarSyncAdapter.apk",
     "versionName":"4.4.4-1230475",
-    "perso":"all"
+    "perso":"gms"
   },
   "com.google.android.apps.cloudprin":{
-    "path":"/custpack/app/unremoveable/CloudPrint.apk",
+    "path":"/custpack/app/unremoveable/withoutlib/CloudPrint.apk",
     "versionName":"0.9.10",
-    "perso":"all"
+    "perso":"gms"
   },
   "com.google.android.gallery3":{
-    "path":"/custpack/app/unremoveable/GalleryGoogle.apk",
+    "path":"/custpack/app/unremoveable/withoutlib/GalleryGoogle.apk",
     "versionName":"1.1.40304",
-    "perso":"all"
+    "perso":"gms"
   },
   "com.google.android.apps.book":{
-    "path":"/custpack/app/unremoveable/Books.apk",
+    "path":"/custpack/app/unremoveable/withoutlib/Books.apk",
     "versionName":"3.1.49",
-    "perso":"all"
+    "perso":"gms"
   },
-  "com.android.providers.partnerbookmark":{
-    "path":"/custpack/app/unremoveable/PartnerBookmarksProvider.apk",
-    "versionName":"4.4.2-1289630",
-    "perso":"all"
+  "com.google.android.launche":{
+    "path":"/custpack/app/unremoveable/withoutlib/GoogleHome.apk",
+    "versionName":"1.1.0.1167994",
+    "perso":"gms"
   },
   "com.google.android.apps.genie.geniewidge":{
-    "path":"/custpack/app/unremoveable/GenieWidget.apk",
-    "versionName":"1.3.11",
-    "perso":"all"
+    "path":"/custpack/app/unremoveable/withoutlib/GenieWidget.apk",
+    "versionName":"2.0 (1402436)",
+    "perso":"gms"
   },
   "com.google.android.syncadapters.contact":{
-    "path":"/custpack/app/unremoveable/GoogleContactsSyncAdapter.apk",
-    "versionName":"4.4.2-1289630",
-    "perso":"all"
+    "path":"/custpack/app/unremoveable/withoutlib/GoogleContactsSyncAdapter.apk",
+    "versionName":"4.4.4-1227136",
+    "perso":"gms"
   },
   "com.google.android.youtub":{
-    "path":"/custpack/app/unremoveable/YouTube.apk",
-    "versionName":"5.7.41",
-    "perso":"all"
+    "path":"/custpack/app/unremoveable/withoutlib/YouTube.apk",
+    "versionName":"5.9.0.13",
+    "perso":"gms"
   },
   "com.google.android.apps.doc":{
-    "path":"/custpack/app/unremoveable/Drive.apk",
-    "versionName":"2.0.222.39",
-    "perso":"all"
+    "path":"/custpack/app/unremoveable/withoutlib/Drive.apk",
+    "versionName":"2.0.222.51",
+    "perso":"gms"
   },
   "com.google.android.apps.magazine":{
-    "path":"/custpack/app/unremoveable/Magazines.apk",
+    "path":"/custpack/app/unremoveable/withoutlib/Magazines.apk",
     "versionName":"3.2.1",
-    "perso":"all"
+    "perso":"gms"
   },
   "com.google.android.apps.uploade":{
-    "path":"/custpack/app/unremoveable/MediaUploader.apk",
+    "path":"/custpack/app/unremoveable/withoutlib/MediaUploader.apk",
     "versionName":"1.3.242047",
-    "perso":"all"
+    "perso":"gms"
   },
   "com.google.android.tt":{
-    "path":"/custpack/app/unremoveable/GoogleTTS.apk",
+    "path":"/custpack/app/unremoveable/withoutlib/GoogleTTS.apk",
     "versionName":"3.1.3.1162895",
-    "perso":"all"
+    "perso":"gms"
   },
   "com.google.android.play.game":{
-    "path":"/custpack/app/unremoveable/PlayGames_alldpi.apk",
-    "versionName":"1.6.07 (1129543-30)",
-    "perso":"all"
+    "path":"/custpack/app/unremoveable/withoutlib/PlayGames_alldpi.apk",
+    "versionName":"2.0.11 (1269547-030)",
+    "perso":"gms"
   },
   "com.google.android.apps.plu":{
-    "path":"/custpack/app/unremoveable/PlusOne.apk",
+    "path":"/custpack/app/unremoveable/withoutlib/PlusOne.apk",
     "versionName":"4.4.3.69327528",
-    "perso":"all"
-  },
-  "com.google.android.syncadapters.bookmark":{
-    "path":"/custpack/app/unremoveable/ChromeBookmarksSyncAdapter.apk",
-    "versionName":"4.4-927798",
-    "perso":"all"
+    "perso":"gms"
   },
   "com.google.android.musi":{
-    "path":"/custpack/app/unremoveable/Music2.apk",
-    "versionName":"5.6.1609P.1258283",
-    "perso":"all"
+    "path":"/custpack/app/unremoveable/withoutlib/Music2.apk",
+    "versionName":"5.6.1617P.1333751",
+    "perso":"gms"
   },
   "com.android.browser.provide":{
-    "path":"/custpack/app/unremoveable/BrowserProviderProxy.apk",
-    "versionName":"4.4.2-1289630",
-    "perso":"all"
+    "path":"/custpack/app/unremoveable/withoutlib/BrowserProviderProxy.apk",
+    "versionName":"4.4.4-1227136",
+    "perso":"gms"
   },
   "com.google.android.deskcloc":{
-    "path":"/custpack/app/unremoveable/DeskClockGoogle.apk",
+    "path":"/custpack/app/unremoveable/withoutlib/DeskClockGoogle.apk",
     "versionName":"3.0.0",
-    "perso":"all"
+    "perso":"gms"
   },
   "com.android.chrom":{
-    "path":"/custpack/app/unremoveable/Chrome.apk",
-    "versionName":"35.0.1916.141",
-    "perso":"all"
+    "path":"/custpack/app/unremoveable/withoutlib/Chrome.apk",
+    "versionName":"36.0.1985.135",
+    "perso":"gms"
   },
   "com.google.android.g":{
-    "path":"/custpack/app/unremoveable/Gmail2.apk",
-    "versionName":"4.8 (1167183)",
-    "perso":"all"
+    "path":"/custpack/app/unremoveable/withoutlib/Gmail2.apk",
+    "versionName":"4.9 (1271612)",
+    "perso":"gms"
   },
   "com.google.android.apps.map":{
-    "path":"/custpack/app/unremoveable/Maps_alldpi.apk",
-    "versionName":"8.1.1",
-    "perso":"all"
+    "path":"/custpack/app/unremoveable/withoutlib/Maps_alldpi.apk",
+    "versionName":"8.2.0",
+    "perso":"gms"
   },
   "com.google.android.calenda":{
-    "path":"/custpack/app/unremoveable/CalendarGoogle.apk",
+    "path":"/custpack/app/unremoveable/withoutlib/CalendarGoogle.apk",
     "versionName":"201404014",
-    "perso":"all"
+    "perso":"gms"
+  },
+  "com.google.android.gsf.logi":{
+    "path":"/custpack/app/unremoveable/priv-app/GoogleLoginService_default_light.apk",
+    "versionName":"4.4.4-1227136",
+    "perso":"gms"
+  },
+  "com.google.android.onetimeinitialize":{
+    "path":"/custpack/app/unremoveable/priv-app/GoogleOneTimeInitializer.apk",
+    "versionName":"4.4.4-1227136",
+    "perso":"gms"
+  },
+  "com.google.android.googlequicksearchbo":{
+    "path":"/custpack/app/unremoveable/priv-app/Velvet.apk",
+    "versionName":"3.6.14.1337016.arm",
+    "perso":"gms"
+  },
+  "com.google.android.setupwizar":{
+    "path":"/custpack/app/unremoveable/priv-app/SetupWizard_default_dark.apk",
+    "versionName":"1.3",
+    "perso":"gms"
+  },
+  "com.google.android.backuptranspor":{
+    "path":"/custpack/app/unremoveable/priv-app/GoogleBackupTransport.apk",
+    "versionName":"4.4.4-1227136",
+    "perso":"gms"
+  },
+  "com.google.android.gm":{
+    "path":"/custpack/app/unremoveable/priv-app/GmsCore_alldpi.apk",
+    "versionName":"5.0.89 (1307510-030)",
+    "perso":"gms"
+  },
+  "com.google.android.gs":{
+    "path":"/custpack/app/unremoveable/priv-app/GoogleServicesFramework_default_light.apk",
+    "versionName":"4.4.4-1288895",
+    "perso":"gms"
+  },
+  "com.google.android.feedbac":{
+    "path":"/custpack/app/unremoveable/priv-app/GoogleFeedback.apk",
+    "versionName":"4.4.4-1227136",
+    "perso":"gms"
+  },
+  "com.google.android.gs":{
+    "path":"/custpack/app/unremoveable/priv-app/GoogleServicesFramework_default_dark.apk",
+    "versionName":"4.4.4-1288895",
+    "perso":"gms"
+  },
+  "com.google.android.partnersetu":{
+    "path":"/custpack/app/unremoveable/priv-app/GooglePartnerSetup.apk",
+    "versionName":"4.4.4-1227136",
+    "perso":"gms"
+  },
+  "com.google.android.configupdate":{
+    "path":"/custpack/app/unremoveable/priv-app/ConfigUpdater.apk",
+    "versionName":"4.4.4-1227136",
+    "perso":"gms"
+  },
+  "com.google.android.ta":{
+    "path":"/custpack/app/unremoveable/priv-app/TagGoogle.apk",
+    "versionName":"1.1",
+    "perso":"gms"
+  },
+  "com.google.android.setupwizar":{
+    "path":"/custpack/app/unremoveable/priv-app/SetupWizard_default_light.apk",
+    "versionName":"1.3",
+    "perso":"gms"
+  },
+  "com.google.android.gsf.logi":{
+    "path":"/custpack/app/unremoveable/priv-app/GoogleLoginService_default_dark.apk",
+    "versionName":"4.4.4-1227136",
+    "perso":"gms"
+  },
+  "com.android.vendin":{
+    "path":"/custpack/app/unremoveable/priv-app/Phonesky.apk",
+    "versionName":"4.9.13",
+    "perso":"gms"
   }
 }
