@@ -72,8 +72,6 @@ def get_versions(dir, apk_info_list, is_priv):
             apk_info_list.append(apk_item)
 
 def generate_json_from_dir(directory, file):
-    # gms_dir = dir + '/custo_wimdata_ng/wcustores/App/Unremoveable/GMS/'
-    # gms_pri_dir = dir + '/custo_wimdata_ng/wcustores/App/Unremoveable/GMS_pri/'
     apk_info_list = []
 
     if directory[-1] != '/':
@@ -124,7 +122,7 @@ def main():
         else:
             print INVALID_CONFIG_ARGUMENT
     else:#无选项的情况:依照json进行检查
-        start_checking()
+        start_checking(args)
 
 def check_handler(standard_dict, path_dict):
     """
@@ -182,7 +180,7 @@ def check_handler(standard_dict, path_dict):
 
     return diff_dict
 
-def start_checking():
+def start_checking(args):
     """
     检查手机中的apk是否按照3rd.json和gsm.json进行预置.
     """
