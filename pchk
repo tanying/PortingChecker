@@ -68,9 +68,9 @@ def get_versions(dir, apk_info_list, is_priv):
                 else:
                     is_withlib = is_withlib_or_withoutlib(filepath)
                     if is_withlib:
-                        path = '/custpack/app/' + is_removeable + '/withlib/' + file
+                        path = '/custpack/app/' + is_removeable + '/withlibs/' + file
                     else:
-                        path = '/custpack/app/' + is_removeable + '/withoutlib/' + file
+                        path = '/custpack/app/' + is_removeable + '/withoutlibs/' + file
 
                 apk_item = []
                 apk_item.append(name)
@@ -166,7 +166,7 @@ def check_handler(standard_dict, path_dict, perso_list):
                         diff_dict[pkg]['standard_path'] = standard_dict[pkg]['path']
                         print '    Different path,'
                         print '        standard_path: %s' % standard_dict[pkg]['path']
-                        print '        pkg_path: %s' % pkg_path
+                        print '        pkg_path:      %s' % pkg_path
                     else:
                         print '    Equal path'
                 else:
@@ -186,7 +186,7 @@ def check_handler(standard_dict, path_dict, perso_list):
                         diff_dict[pkg]['standard_verison'] = standard_dict[pkg]['versionName']
                         print '    Different versionName,'
                         print '        standard_verison: %s' % standard_dict[pkg]['versionName']
-                        print '        pkg_version: %s' % pkg_version
+                        print '        pkg_version:      %s' % pkg_version
 
                     else:
                         print '    Equal version'
