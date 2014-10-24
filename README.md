@@ -29,15 +29,13 @@ For checking the accuracy of porting applications
     python pchk --gen gms.json
     python pchk --gen 3rd.json
 
+    前提是config目录下包含gms.json和3rd.json两个文件
     通过运行本条命令只会载入需要进行修改的json文件,并在html页面生成修改后的json.
     真正的改动json操作需要手动copy已经生成好的页面json到config目录下.
     
-## 通过gms文件夹生成gms.json
-    python pchk --gen dir
+## 通过文件夹生成json
+    python pchk --gen 需要生成json的路径 文件名
 
-    Please input the Project directory path: 输入包含GMS和GMS_pri的文件夹
-    例如:
-    /local/android/soul4/custo_wimdata_ng/wcustores/App/Unremoveable
 
 
 
