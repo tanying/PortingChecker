@@ -7,7 +7,7 @@ For checking the accuracy of porting applications
     https://github.com/tanying/PortingChecker/archive/pygui.zip
 
     或者通过git:
-    git clone -b pygui git@git.oschina.net:tanying/otscli.git
+    git clone -b pygui https://github.com/tanying/PortingChecker.git
     更新代码:
     git pull origin pygui
 
