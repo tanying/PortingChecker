@@ -124,9 +124,9 @@
     "versionName":"3.6.70",
     "perso":"tmo"
   },
-  " getting 'android:versionCode' attribute: attribute is not an integer val":{
+  "com.carrieriq.tmobile":{
     "path":"/custpack/app/unremoveable/priv-app/IQtmobile.apk",
-    "versionName":"g 'android:versionCode' attribute: attribute is not an integer valu",
+    "versionName":"1.28",
     "perso":"tmo"
   },
   "com.customermobile.tmous.preload":{
