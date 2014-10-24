@@ -1,135 +1,140 @@
 {
-  "com.nuance.swype.inpu":{
+  "com.nuance.swype.input":{
     "path":"/custpack/app/unremoveable/withlib/Swype.apk",
     "versionName":"1.7.13.31408",
     "perso":"all"
   },
-  "com.jrdcom.fmradi":{
+  "com.jrdcom.fmradio":{
     "path":"/custpack/app/unremoveable/withoutlib/FMRadio_v4.0.001.0_signed_platform.apk",
     "versionName":"1.0",
     "perso":"all"
   },
-  "com.jrdcom.setupwizar":{
+  "com.jrdcom.setupwizard":{
     "path":"/custpack/app/unremoveable/withoutlib/JrdSetupWizard_common_v4.0.1.001.0_signed.apk",
     "versionName":"v4.0.1.001.0",
     "perso":"all"
   },
-  "com.android.soundrecorde":{
+  "com.android.soundrecorder":{
     "path":"/custpack/app/unremoveable/withoutlib/JrdSoundRecorder_common_v1.1.104.0_signed.apk",
     "versionName":"v1.1.104.0",
     "perso":"all"
   },
-  "com.jrdcom.launche":{
+  "com.jrdcom.launcher":{
     "path":"/custpack/app/unremoveable/withoutlib/JrdLauncher_common_v2.8.001.0_signed.apk",
     "versionName":"v2.8.001.0",
     "perso":"all"
   },
-  "com.jrdcom.musi":{
+  "com.jrdcom.alcatelhelp":{
+    "path":"/custpack/app/unremoveable/withoutlib/JrdAlcatelHelp_common_v2.6.014_signed.apk",
+    "versionName":"v2.6.014",
+    "perso":"all"
+  },
+  "com.jrdcom.music":{
     "path":"/custpack/app/unremoveable/withlib/JrdMusic_global_v3.3.010_signed.apk",
     "versionName":"3.3.010",
     "perso":"all"
   },
-  "com.jrdcom.wifidirecttransfe":{
+  "com.jrdcom.wifidirecttransfer":{
     "path":"/custpack/app/unremoveable/withoutlib/JrdWifiP2PTransfer_1.0.004_signed.apk",
     "versionName":"v1.0.004",
     "perso":"all"
   },
-  "com.jrdcom.filemanage":{
+  "com.jrdcom.filemanager":{
     "path":"/custpack/app/unremoveable/withoutlib/JrdFileManager_common_v1.6.004.0_signed.apk",
     "versionName":"v1.6.004.0",
     "perso":"all"
   },
-  "com.jrdcom.weathe":{
+  "com.jrdcom.weather":{
     "path":"/custpack/app/unremoveable/withoutlib/JrdWeather_common_v1.8.043_signed.apk",
     "versionName":"v1.8.043",
     "perso":"all"
   },
-  "com.jrdcom.ui.note":{
+  "com.jrdcom.ui.notes":{
     "path":"/custpack/app/unremoveable/withoutlib/JrdNote_common_v4.0.1.001.0_signed.apk",
     "versionName":"v4.0.1.001.0",
     "perso":"all"
   },
-  "com.jrdcom.usercardservic":{
+  "com.jrdcom.usercardservice":{
     "path":"/custpack/app/unremoveable/withoutlib/JrdUserCenterService_common_v1.0.216_signed.apk",
     "versionName":"v2.2_409",
     "perso":"all"
   },
-  "com.android.calculator":{
+  "com.android.calculator2":{
     "path":"/custpack/app/unremoveable/withoutlib/JrdCalculator_common_v1.5.001.0_signed.apk",
     "versionName":"v1.5.001.0",
     "perso":"all"
   },
-  "com.jrdcom.compas":{
+  "com.jrdcom.compass":{
     "path":"/custpack/app/unremoveable/withoutlib/JrdCompass_common_v1.4.006_signed.apk",
     "versionName":"v1.4.006",
     "perso":"all"
   },
-  "com.jrdcom.usercar":{
+  "com.jrdcom.usercard":{
     "path":"/custpack/app/unremoveable/withlib/JrdUserCenter_common_v1.0.216_signed.apk",
     "versionName":"v1.0.216",
     "perso":"all"
   },
-  "com.android.deskcloc":{
+  "com.android.deskclock":{
     "path":"/custpack/app/unremoveable/withoutlib/JrdTimeTool_common_v1.6.042_signed.apk",
     "versionName":"v1.6.041",
     "perso":"all"
   },
-  "com.mobisystems.offic":{
+  "com.mobisystems.office":{
     "path":"/custpack/app/unremoveable/withlib/OfficeSuite_Free_7.5_2077.apk",
     "versionName":"7.5.2077",
     "perso":"all"
   },
-  "com.facebook.katan":{
+  "com.facebook.katana":{
     "path":"/custpack/app/unremoveable/withlib/facebook.apk",
     "versionName":"17.0.0.23.16",
     "perso":"all"
   },
-  "com.twitter.androi":{
+  "com.twitter.android":{
     "path":"/custpack/app/unremoveable/withlib/Twitter-5.25.0-release-20140913.apk",
     "versionName":"5.25.0",
     "perso":"all"
   },
-  "com.mobitv.client.tmobiletvh":{
+  "com.mobitv.client.tmobiletvhd":{
     "path":"/custpack/app/unremoveable/withlib/TMobile_v6.0.6.2-d334577_2014_06_06_production.apk",
     "versionName":"6.0.6.2-d334577",
     "perso":"tmo"
   },
-  "com.tmobile.vvm.applicatio":{
+  "com.tmobile.vvm.application":{
     "path":"/custpack/app/unremoveable/withoutlib/VVM-5.2.4.2-final-release.apk",
     "versionName":"5.2.4.2",
     "perso":"tmo"
   },
-  "com.lookou":{
+  "com.lookout":{
     "path":"/custpack/app/unremoveable/withlib/Lookout.apk",
     "versionName":"9.1.3-aeb9077",
     "perso":"tmo"
   },
-  "com.tmobile.pr.adap":{
+  "com.tmobile.pr.adapt":{
     "path":"/custpack/app/unremoveable/withoutlib/AdaptClient.apk",
     "versionName":"1.0.3",
     "perso":"tmo"
   },
-  "us.com.dt.iq.appsource.tmobil":{
+  "us.com.dt.iq.appsource.tmobile":{
     "path":"/custpack/app/unremoveable/withoutlib/AppSource-tmobile-1.2.07-b67-US-PROD.apk",
     "versionName":"1.2.07",
     "perso":"tmo"
   },
-  "com.tmobile.pr.mytmobil":{
+  "com.tmobile.pr.mytmobile":{
     "path":"/custpack/app/unremoveable/priv-app/MyAccount.apk",
     "versionName":"3.6.70",
     "perso":"tmo"
   },
-  " getting 'android:versionCode' attribute: attribute is not an integer va":{
+  " getting 'android:versionCode' attribute: attribute is not an integer val":{
     "path":"/custpack/app/unremoveable/priv-app/IQtmobile.apk",
     "versionName":"g 'android:versionCode' attribute: attribute is not an integer valu",
     "perso":"tmo"
   },
-  "com.customermobile.tmous.preloa":{
+  "com.customermobile.tmous.preload":{
     "path":"/custpack/app/unremoveable/priv-app/CustomerMobile.apk",
     "versionName":"tmous-0.9.7",
     "perso":"tmo"
   },
-  "com.amazon.mShop.androi":{
+  "com.amazon.mShop.android":{
     "path":"/custpack/app/removeable/withlib/AmazonMobileShop.apk",
     "versionName":"2.10.0",
     "perso":"tmo"

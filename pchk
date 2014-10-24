@@ -46,8 +46,8 @@ def is_removeable_or_unremoveable(filepath):
 def get_versions(dir, apk_info_list, is_priv):
     for root,dirnames,filenames in os.walk(dir):
         for file in filenames:
-            file = file.strip()
-            if file[-4:] == '.apk':
+            filename = os.path.basename(file.strip())
+            if filename[-4:] == '.apk':
                 perso = get_perso_attr(dir)
                 filepath = dir + file
                 command = 'aapt dump badging %s | grep version' % filepath
@@ -55,7 +55,7 @@ def get_versions(dir, apk_info_list, is_priv):
                 aapt_str = output.strip()
 
                 name_left = aapt_str.find('name')+6 #{name='}
-                name_right = aapt_str.find(' versionCode') - 2
+                name_right = aapt_str.find(' versionCode') - 1
                 name = aapt_str[name_left:name_right]
 
                 version_left = aapt_str.find('versionName')+13 #{versionName='}
