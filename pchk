@@ -150,8 +150,8 @@ def check_handler(standard_dict, path_dict, perso_list):
     logger.debug(standard_dict)
     for pkg in standard_dict:
         # 判断pkg是否是需要判断的perso
-        logger.info(pkg)
-        logger.info(standard_dict[pkg])
+        logger.debug(pkg)
+        logger.debug(standard_dict[pkg])
         if is_argument_in_dataset(standard_dict[pkg]['perso'], perso_list, True):
             print 'Checking %s now...' % pkg
             diff_dict[pkg] = {}
@@ -245,6 +245,7 @@ def start_checking(args):
             logger.debug('gms path dict:%s' % path_dict)
             #获取difference dict
             diff_dict = check_handler(standard_dict, path_dict, perso_list)
+            logger.debug('diff dict:%s' % diff_dict)
             #将diff_dict显示为compare_result.txt
             result_string = ''
             for pkg in diff_dict:
@@ -258,11 +259,11 @@ def start_checking(args):
                         if info.has_key('pkg_path'):
                             result_string += '    Different path,\n'
                             result_string += '        standard_path: %s\n' % info['standard_path']
-                            result_string += '        pkg_path: %s\n' % info['pkg_path']
+                            result_string += '        pkg_path:      %s\n' % info['pkg_path']
                         if info.has_key('pkg_version'):
                             result_string += '    Different version,\n'
                             result_string += '        standard_version: %s\n' % info['standard_verison']
-                            result_string += '        pkg_version: %s\n' % info['pkg_version']
+                            result_string += '        pkg_version:      %s\n' % info['pkg_version']
                     result_string += '\n'
 
             f = open(config.RESULT_FILE, 'wb')
