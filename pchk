@@ -200,6 +200,7 @@ def check_handler(standard_dict, path_dict, perso_list):
 
             else:
                 #out put error msg
+                check_result = 'FAIL'
                 print '    Package not porting.'
                 diff_dict[pkg]['info'] = 'Package not porting.'
 
