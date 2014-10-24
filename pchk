@@ -146,6 +146,7 @@ def check_handler(standard_dict, path_dict, perso_list):
     """
     按照标准字典检查手机中的信息
     """
+    check_result = 'PASS'
     diff_dict = {}
     logger.debug(standard_dict)
     for pkg in standard_dict:
@@ -162,6 +163,7 @@ def check_handler(standard_dict, path_dict, perso_list):
                 if standard_dict[pkg].has_key('path'):
                     result = compare_string(standard_dict[pkg]['path'], pkg_path)
                     if not result:
+                        check_result = 'FAIL'
                         diff_dict[pkg]['pkg_path'] = pkg_path
                         diff_dict[pkg]['standard_path'] = standard_dict[pkg]['path']
                         print '    Different path,'
@@ -182,6 +184,7 @@ def check_handler(standard_dict, path_dict, perso_list):
                 if standard_dict[pkg].has_key('versionName'):
                     result = compare_string(standard_dict[pkg]['versionName'], pkg_version)
                     if not result:
+                        check_result = 'FAIL'
                         diff_dict[pkg]['pkg_version'] = pkg_version
                         diff_dict[pkg]['standard_verison'] = standard_dict[pkg]['versionName']
                         print '    Different versionName,'
@@ -200,6 +203,7 @@ def check_handler(standard_dict, path_dict, perso_list):
                 print '    Package not porting.'
                 diff_dict[pkg]['info'] = 'Package not porting.'
 
+    print 'Checking Result: %s' % check_result
     return diff_dict
 
 def start_checking(args):
