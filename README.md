@@ -2,7 +2,7 @@ PortingChecker
 ==============
 
 For checking the accuracy of porting applications
-
+hajksdhkjasdhkjashdkjashdhas
 配置文件: 
     config/3rd.json 键和值必须用双引号包含,不得用单引号
     config/gms.json
