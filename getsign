@@ -1,0 +1,50 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+#Get Apk signature list 
+
+__author__ = 'Tan Ying<ying.tan@tcl.com>' 
+
+import os
+import sys
+import getopt
+import commands
+import shutil
+from utils import *
+
+def get_apk_sign(path):
+
+    command = 'adb pull %s ./bin/' % path
+    os.system(command)
+
+    apkname = get_apkname_form_path(path)
+    if os.path.isfile('./bin/%s' % apkname):
+        # os.system('jarsigner -certs -verbose -verify ./bin/%s' % apkname)
+        os.system('./getcertificate ./bin/%s' % apkname)
+        os.remove('./bin/%s' % apkname)
+
+def main():
+    try:
+        #Get the path_dict from phone
+        command = 'adb shell pm list packages -f > %s' % PATH_FILE
+        status = os.system(command)
+
+        if status == 0:#normal usb debug
+            if os.path.isfile(config.PATH_FILE):
+                path_dict = get_pkg_path_dict()
+
+                for pkg in path_dict:
+                    apk_path = path_dict[pkg]
+
+                    if apk_path.find('/system/') == 0:
+                        
+                        get_apk_sign(apk_path)
+            else:
+                sys.exit(1)          
+        else:
+            print(HINT_UNCONNECTED_USB)
+    except (EOFError, KeyboardInterrupt):
+        print HINT_EXIT
+        sys.exit(1)    
+
+if __name__ == '__main__':
+	main()

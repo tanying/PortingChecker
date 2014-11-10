@@ -109,6 +109,12 @@ def get_pkg_path_dict():
     f.close()
     return pkg_dict
 
+
+def get_apkname_form_path(path):
+    index = path.rfind('/') + 1
+    apkname = path[index:]
+    return apkname
+
 def generate_config_jsfile(path, js_path):
     """
     载入json文件,并生成js文件,用于导入html
