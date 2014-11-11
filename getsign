@@ -13,14 +13,38 @@ from utils import *
 
 def get_apk_sign(path):
 
+    print 'Get signature of %s' % path
     command = 'adb pull %s ./bin/' % path
-    os.system(command)
+    commands.getstatusoutput(command)
 
     apkname = get_apkname_form_path(path)
     if os.path.isfile('./bin/%s' % apkname):
-        # os.system('jarsigner -certs -verbose -verify ./bin/%s' % apkname)
-        os.system('./getcertificate ./bin/%s' % apkname)
+        status, output = commands.getstatusoutput('jarsigner -certs -verbose -verify ./bin/%s' % apkname)
+
+        left_index = output.find('CN=')
+        temp_string = output[left_index:]
+        right_index = temp_string.find(',') 
+
+        signature = temp_string[:right_index]
+        print '  %s' % signature
+        #os.system('./getcertificate ./bin/%s' % apkname)
         os.remove('./bin/%s' % apkname)
+        return signature
+
+def display_signlist(error, normal):
+    string = ''
+    string += '*****Error Signature List*****\n'
+    for apk in error:
+        string += '%s: %s\n' % (apk, error[apk])
+
+    string += '*****Normal Signature List*****\n'
+    for apk in normal:
+        string += '%s: %s\n' % (apk, normal[apk])
+
+    f = open(SIGN_RESULT, 'w')
+    result = str(string)
+    f.write(result)
+    f.close()
 
 def main():
     try:
@@ -29,15 +53,25 @@ def main():
         status = os.system(command)
 
         if status == 0:#normal usb debug
+            error_dict = {}
+            normal_dict = {}
+
             if os.path.isfile(config.PATH_FILE):
                 path_dict = get_pkg_path_dict()
 
                 for pkg in path_dict:
                     apk_path = path_dict[pkg]
 
-                    if apk_path.find('/system/') == 0:
-                        
-                        get_apk_sign(apk_path)
+                    #if apk_path.find('/system/') == 0:                        
+                    signature = get_apk_sign(apk_path)
+
+                    if signature and signature.find('Android') == -1:
+                        normal_dict[apk_path] = signature
+                    else:
+                        error_dict[apk_path] = signature
+
+                display_signlist(error_dict, normal_dict)
+
             else:
                 sys.exit(1)          
         else:
