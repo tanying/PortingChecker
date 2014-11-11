@@ -37,7 +37,7 @@ def display_signlist(error, normal):
     for apk in error:
         string += '%s: %s\n' % (apk, error[apk])
 
-    string += '*****Normal Signature List*****\n'
+    string += '\n*****Normal Signature List*****\n'
     for apk in normal:
         string += '%s: %s\n' % (apk, normal[apk])
 
