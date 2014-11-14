@@ -20,8 +20,8 @@
     "perso":"all"
   },
   "com.jrdcom.launcher":{
-    "path":"/custpack/app/unremoveable/withoutlibs/JrdLauncher_common_v2.8.001.0_signed.apk",
-    "versionName":"v2.8.001.0",
+    "path":"/custpack/app/unremoveable/withoutlibs/JrdLauncher_common_v2.8.0005.0_signed.apk",
+    "versionName":"v2.8.0005.0",
     "perso":"all"
   },
   "com.jrdcom.alcatelhelp":{
@@ -40,23 +40,23 @@
     "perso":"all"
   },
   "com.jrdcom.filemanager":{
-    "path":"/custpack/app/unremoveable/withoutlibs/JrdFileManager_common_v1.6.004.0_signed.apk",
-    "versionName":"v1.6.004.0",
+    "path":"/custpack/app/unremoveable/withoutlibs/JrdFileManager_common_v1.6.005.0_signed.apk",
+    "versionName":"v1.6.005.0",
     "perso":"all"
   },
   "com.jrdcom.weather":{
-    "path":"/custpack/app/unremoveable/withoutlibs/JrdWeather_common_v1.8.043_signed.apk",
-    "versionName":"v1.8.043",
-    "perso":"all"
-  },
-  "com.jrdcom.ui.notes":{
-    "path":"/custpack/app/unremoveable/withoutlibs/JrdNote_common_v4.0.1.001.0_signed.apk",
+    "path":"/custpack/app/unremoveable/withoutlibs/JrdWeather_common_v4.0.1.001.0_signed.apk",
     "versionName":"v4.0.1.001.0",
     "perso":"all"
   },
+  "com.jrdcom.ui.notes":{
+    "path":"/custpack/app/unremoveable/withoutlibs/JrdNote_common_v4.0.1.0002.0_signed.apk",
+    "versionName":"v4.0.1.0002.0",
+    "perso":"all"
+  },
   "com.jrdcom.usercardservice":{
-    "path":"/custpack/app/unremoveable/withoutlibs/JrdUserCenterService_common_v1.0.216_signed.apk",
-    "versionName":"v2.2_409",
+    "path":"/custpack/app/unremoveable/withoutlibs/JrdUserCenterService_common_v1.0.217_signed.apk",
+    "versionName":"v1.0.217",
     "perso":"all"
   },
   "com.android.calculator2":{
@@ -70,8 +70,8 @@
     "perso":"all"
   },
   "com.jrdcom.usercard":{
-    "path":"/custpack/app/unremoveable/withlibs/JrdUserCenter_common_v1.0.216_signed.apk",
-    "versionName":"v1.0.216",
+    "path":"/custpack/app/unremoveable/withlibs/JrdUserCenter_common_v1.0.217_signed.apk",
+    "versionName":"v1.0.217",
     "perso":"all"
   },
   "com.android.deskclock":{
@@ -79,9 +79,9 @@
     "versionName":"v1.6.041",
     "perso":"all"
   },
-  "com.mobisystems.office":{
-    "path":"/custpack/app/unremoveable/withlibs/OfficeSuite_Free_7.5_2077.apk",
-    "versionName":"7.5.2077",
+  "cn.wps.moffice_eng":{
+    "path":"/custpack/app/unremoveable/withoutlibs/WPSOfficeMultilLang_20140826_6.0_185502_Kingsoft.apk",
+    "versionName":"6.0",
     "perso":"all"
   },
   "com.facebook.katana":{
@@ -111,7 +111,7 @@
   },
   "com.tmobile.pr.adapt":{
     "path":"/custpack/app/unremoveable/withoutlibs/AdaptClient.apk",
-    "versionName":"1.0.3",
+    "versionName":"1.1.4",
     "perso":"tmo"
   },
   "us.com.dt.iq.appsource.tmobile":{
@@ -137,6 +137,16 @@
   "com.amazon.mShop.android":{
     "path":"/custpack/app/removeable/withlibs/AmazonMobileShop.apk",
     "versionName":"2.10.0",
+    "perso":"tmo"
+  },
+  "com.tcl.smartsuite":{
+    "path":"/custpack/app/unremoveable/priv-app/SmartSuite1.1.0_20140717.apk",
+    "versionName":"1.1.0",
+    "perso":"all"
+  },
+  "com.android.providers.partnerbookmarks":{
+    "path":"/custpack/app/unremoveable/withoutlibs/PartnerBookmarksProvider_signed.apk",
+    "versionName":"4.4.4",
     "perso":"tmo"
   }
 }

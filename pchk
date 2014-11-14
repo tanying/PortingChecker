@@ -230,8 +230,8 @@ def start_checking(args):
         sys.exit(1)
     else:
     #将两个文件合并
-        third_dict = get_standard_pkg_config(STANDARD_3RD_FILE)
-        gms_dict = get_standard_pkg_config(STANDARD_GMS_FILE)
+        third_dict = get_dict_from_json(STANDARD_3RD_FILE)
+        gms_dict = get_dict_from_json(STANDARD_GMS_FILE)
         #将3rd的dict和gms的dict合并成一个dict
         standard_dict = merge_dict(third_dict, gms_dict)
 

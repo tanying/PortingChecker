@@ -62,12 +62,18 @@ def merge_dict(dict1,dict2):
     dict_merged=dict(dict1, **dict2)
     return dict_merged
 
-def get_standard_pkg_config(filepath):
+def get_dict_from_json(filepath):
     fIn = open(filepath, 'rb')
     text = fIn.read()
     fIn.close()
     file_dict = json.loads(text)
     return file_dict
+
+def change_dict_to_json(dict, filepath):
+    fOut = open(filepath, 'w')
+    text = json.dumps(dict)
+    fOut.write(text)
+    fOut.close()  
 
 def get_path_from_phone():
     shell_file_path = sys.path[0] + '/' + config.PULL_PATH_FILE
