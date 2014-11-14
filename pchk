@@ -110,31 +110,60 @@ def main():
     """
     try:
         #--gen选项用于生成json文件, --gen所跟参数只可以是3rd.json和gms.json或者dir <localpath>
-        opts, args = getopt.getopt(sys.argv[1:], '', ['gen='])
+        opts, args = getopt.getopt(sys.argv[1:], 'i:b:v:p:', ['gen=', 'dir'])
     except getopt.GetoptError, e: 
         print e
         sys.exit(1)
 
+    server_dict = get_dict_from_json(SERVER_ADDRESS)
+    
+    ip = server_dict['ip']
+    branch = server_dict['branch'] 
+    project = server_dict['project']
+    version = server_dict['version']
+
     try:
         if opts:#有选项的情况:生成json
-            #opts[0] = [('--config', 'gms.json')]
-            if is_argument_in_dataset(opts[0][1], CONFIG_SET):
-                #启动生成json的html文件
-                filepath = 'config/' + opts[0][1]
-                js_filepath = config.STANDARD_JSON_CONFIG_JS
-                if generate_config_jsfile(filepath, js_filepath):
-                    #用firefox打开html文件
-                    os.system('firefox %s' % HTML_GENERATER)
-            #不提供方法的接口    
-            elif opts[0][1] == 'dir' and len(args) == 2:
-                # args[0]: path, args[1]: filename
-                project_dir = args[0]
-                filename = args[1]
-                generate_json_from_dir(project_dir, filename)
-            else:
-                print INVALID_CONFIG_ARGUMENT
-        else:#无选项的情况:依照json进行检查
-            start_checking(args)
+            #opts[0] = [('--gen', 'gms.json')]
+            for opt, value in opts:
+                if opt == '--gen' and is_argument_in_dataset(value, CONFIG_SET):
+                    #启动生成json的html文件
+                    filepath = 'config/' + opts[0][1]
+                    js_filepath = config.STANDARD_JSON_CONFIG_JS
+                    if generate_config_jsfile(filepath, js_filepath):
+                        #用firefox打开html文件
+                        os.system('firefox %s' % HTML_GENERATER)
+                        sys.exit(0)
+                #不提供方法的接口    
+                elif opt == '--dir' and len(args) == 2:
+                    # args[0]: path, args[1]: filename
+                    project_dir = args[0]
+                    filename = args[1]
+                    generate_json_from_dir(project_dir, filename)
+                    sys.exit(0)
+                elif opt == '-i':
+                    ip = value          
+                elif opt == '-b':
+                    branch = value
+                elif opt == '-p':
+                    project = value     
+                elif opt == '-v':
+                    version = value                
+            server_dict['ip'] = ip
+            server_dict['branch'] = branch
+            server_dict['project'] = project
+            server_dict['version'] = version
+            change_dict_to_json(server_dict, SERVER_ADDRESS)
+
+        #无选项的情况:依照json进行检查
+        remote_addr = '%s:/local/build/%s/%s/custo_wimdata_ng/wcustores/%s/App' % (ip, branch, version, project)
+        print 'scp %s/3rd.json ./config/' % remote_addr
+        os.system('scp %s/3rd.json ./config/' % remote_addr)
+        print 'scp %s/gms.json ./config/' % remote_addr
+        os.system('scp %s/gms.json ./config/' % remote_addr)
+        
+        start_checking(args)
+
     except (EOFError, KeyboardInterrupt):
         print HINT_EXIT
         sys.exit(1)

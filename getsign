@@ -49,46 +49,6 @@ def display_signlist(error, normal):
 
 def main():
     try:
-        #--gen选项用于生成json文件, --gen所跟参数只可以是3rd.json和gms.json或者dir <localpath>
-        opts, args = getopt.getopt(sys.argv[1:], 'i:b:p:', [])
-    except getopt.GetoptError, e: 
-        print e
-        sys.exit(1)
-
-    if args:
-        version= args[0]
-    else:
-        print HINT_LAKE_VERSION_NAME
-        sys.exit(1)
-
-    server_dict = get_dict_from_json(SERVER_ADDRESS)
-    
-    ip = server_dict['ip']
-    branch = server_dict['branch'] 
-    project = server_dict['project']
-
-    if opts:
-        for opt, value in opts:
-            print opt
-            if opt == '-i':
-                ip = value          
-            elif opt == '-b':
-                branch = value
-            elif opt == '-p':
-                project = value     
-
-        server_dict['ip'] = ip
-        server_dict['branch'] = branch
-        server_dict['project'] = project
-        change_dict_to_json(server_dict, SERVER_ADDRESS)
-
-    remote_addr = '%s:/local/build/%s/%s/custo_wimdata_ng/wcustores/%s/App' % (ip, branch, version, project)
-    print 'scp %s/3rd.json ./config/' % remote_addr
-    os.system('scp %s/3rd.json ./config/' % remote_addr)
-    print 'scp %s/gms.json ./config/' % remote_addr
-    os.system('scp %s/gms.json ./config/' % remote_addr)
-
-    try:
         #Get the path_dict from phone
         command = 'adb shell pm list packages -f > %s' % PATH_FILE
         status = os.system(command)
