@@ -25,6 +25,32 @@ For checking the accuracy of porting applications
     pc需要连上手机, USB调试已打开
     需要保证config目录下有3rd.json和gms.json两个文件
 
+    python pchk [perso] 
+    指定perso比较， perso名目前仅支持tmo和mps
+    tmo表示Tmobile
+    mps表示MetroPCS 
+
+## 修改服务器地址:
+    由于比较过程中有一个从服务器远程拷贝3rd.json和gms.json的动作。
+    通过修改./config/server.json可以修改服务器的ip地址，分支名，项目名和版本名
+    也可以通过指定参数修改服务器地址。
+    例如：
+    python pchk -v vA12  表示将版本名修改为vA12
+
+    -i      更改ip
+    -b      更改branch
+    -p      更改project
+    -v      更改version
+    
+    例如：
+    172.24.219.164:/local/build/alto_4.5_tmous-release/vA12/custo_wimdata_ng/wcustores/jrdsh6752_lw_kk/App/3rd.json
+    ip = 172.24.219.164
+    branch = alto_4.5_tmous-release
+    project = jrdsh6752_lw_kk
+    version = vA12
+
+    如果不输入这些参数，工具会默认使用上一次拷贝文件的服务器的地址 
+
 ## 修改配置文件:
     python pchk --gen gms.json
     python pchk --gen 3rd.json
