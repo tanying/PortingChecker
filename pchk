@@ -160,8 +160,8 @@ def main():
         #无选项的情况:依照json进行检查
         remote_addr = '%s:/local/build/%s/%s/custo_wimdata_ng/wcustores/%s/App' % (ip, branch, version, project)
         print 'scp android-bld@%s/*.json .' % remote_addr
-        os.system('scp android-bld@%s/*.json .' % remote_addr)
-        #run('scp android-bld@%s/*.json .' % remote_addr ,events={'(?i)password': 'An123456\\n'}) 
+        os.system('scp android-bld@%s/*.json ./config' % remote_addr)
+        #run('scp android-bld@%s/*.json .' % remote_addr ,events={'(?i)password': 'An123456\\n'})
 
         start_checking(args)
 
