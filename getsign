@@ -42,7 +42,8 @@ def display_signlist(error, normal):
     for apk in normal:
         string += '%s: %s\n' % (apk, normal[apk])
 
-    f = open(SIGN_RESULT, 'w')
+    f = open(RESULT_FILE, 'a')
+    #f = open(SIGN_RESULT, 'w')
     result = str(string)
     f.write(result)
     f.close()

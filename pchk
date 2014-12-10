@@ -305,6 +305,11 @@ def start_checking(args):
             result = str(result_string)
             f.write(result)
             f.close()
+
+            print '\nStart checking signature...'
+            os.system('python getsign')
+            print '\nCheck over!\nResult output: %s' % RESULT_FILE
+
         else:
             print(HINT_UNCONNECTED_USB)
     except (EOFError, KeyboardInterrupt):
