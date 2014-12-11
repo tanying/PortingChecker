@@ -8,10 +8,9 @@ import shutil
 import logging
 import config
 
-if os.path.exists(config.OUTPUT_DIR):
-    shutil.rmtree(config.OUTPUT_DIR)
+if os.path.exists(config.LOG_FILE):
+    os.remove(config.LOG_FILE)
 
-os.mkdir(config.OUTPUT_DIR)
 os.mknod(config.LOG_FILE)
 
 logging.basicConfig(level = config.LOG_LEVEL_FILE,

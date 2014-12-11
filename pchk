@@ -301,7 +301,7 @@ def start_checking(args):
                             result_string += '        pkg_version:      %s\n' % info['pkg_version']
                     result_string += '\n'
 
-            f = open(config.RESULT_FILE, 'wb')
+            f = open(config.RESULT_FILE, 'w')
             result = str(result_string)
             f.write(result)
             f.close()

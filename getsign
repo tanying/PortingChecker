@@ -71,6 +71,7 @@ def main():
                         normal_dict[apk_path] = signature
                     else:
                         error_dict[apk_path] = signature
+                
 
                 display_signlist(error_dict, normal_dict)
 
