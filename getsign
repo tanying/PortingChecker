@@ -12,6 +12,14 @@ import commands
 import shutil
 from utils import *
 
+def cut_signinfo(keyword, string):
+    left_index = string.find(keyword)
+    temp_string = string[left_index:]
+    right_index = temp_string.find(',') 
+
+    signature = temp_string[:right_index]
+    return signature
+
 def get_apk_sign(path):
 
     print 'Get signature of %s' % path
@@ -22,11 +30,12 @@ def get_apk_sign(path):
     if os.path.isfile('./bin/%s' % apkname):
         status, output = commands.getstatusoutput('jarsigner -certs -verbose -verify ./bin/%s' % apkname)
 
-        left_index = output.find('CN=')
-        temp_string = output[left_index:]
-        right_index = temp_string.find(',') 
+        cn_sign = cut_signinfo('CN=', output)
+        ou_sign = cut_signinfo('OU=', output)
+        o_sign = cut_signinfo('O=', output)
 
-        signature = temp_string[:right_index]
+        signature = cn_sign + ',' + ou_sign + ',' + o_sign
+
         print '  %s' % signature
         #os.system('./getcertificate ./bin/%s' % apkname)
         os.remove('./bin/%s' % apkname)
@@ -49,6 +58,9 @@ def display_signlist(error, normal):
     f.close()
 
 def main():
+    # apk_path = '/system/app/LatinIME.apk'
+    # print get_apk_sign(apk_path)
+
     try:
         #Get the path_dict from phone
         command = 'adb shell pm list packages -f > %s' % PATH_FILE
@@ -67,7 +79,7 @@ def main():
                     #if apk_path.find('/system/') == 0:                        
                     signature = get_apk_sign(apk_path)
 
-                    if signature and signature.find('Android') == -1:
+                    if signature and signature.find('CN=Android,OU=Android,O=Android') == -1:
                         normal_dict[apk_path] = signature
                     else:
                         error_dict[apk_path] = signature
