@@ -8,6 +8,10 @@ import shutil
 import logging
 import config
 
+
+if not os.path.exists(config.OUTPUT_DIR):
+    os.mkdir(config.OUTPUT_DIR)
+
 if os.path.exists(config.LOG_FILE):
     os.remove(config.LOG_FILE)
 
