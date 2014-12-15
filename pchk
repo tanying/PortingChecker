@@ -1,0 +1,320 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+#Porting Checker
+
+__author__ = 'Tan Ying<ying.tan@tcl.com>' 
+
+import os
+import sys
+import getopt
+import commands
+import shutil
+import getpass
+from utils import *
+from pexpect import * 
+
+logger = getLogging('pchk')
+
+def get_confirm_result(string):
+    return (string.lower() == 'y' or string.lower() == 'yes') and True or False
+
+def confirm_html_gen_over(filepath):
+    print 'If already, Open the corresponding file now?'
+    gen_over = raw_input('press y(yes), else(exit) \n')
+
+    if get_confirm_result(gen_over):
+        print 'If already, Press CTRL+C to exit'
+        os.system('gedit %s' % filepath)
+
+    else:
+        print 'Please copy the json to the corresponding path!'
+
+def is_withlib_or_withoutlib(filepath):
+    status = os.system('unzip -l %s | grep lib/' % filepath)
+
+    if status == 0:
+        return True
+    else:
+        return False
+
+def is_removeable_or_unremoveable(filepath):
+    if filepath.find('/Removeable/') > 0:
+        return 'removeable'
+    elif filepath.find('/Unremoveable/') > 0:
+        return 'unremoveable'
+    else:
+        raise PortingCheckerError('Invalid filepath!')
+
+def get_versions(dir, apk_info_list, is_priv):
+    for root,dirnames,filenames in os.walk(dir):
+        for file in filenames:
+            filename = os.path.basename(file.strip())
+            if filename[-4:] == '.apk':
+                perso = get_perso_attr(dir)
+                filepath = dir + file
+                command = 'aapt dump badging %s | grep version' % filepath
+                status, output = commands.getstatusoutput(command)
+                aapt_str = output.strip()
+
+                name_left = aapt_str.find('name')+6 #{name='}
+                name_right = aapt_str.find(' versionCode') - 1
+                name = aapt_str[name_left:name_right]
+
+                version_left = aapt_str.find('versionName')+13 #{versionName='}
+                version = aapt_str[version_left:-1]
+
+                is_removeable = is_removeable_or_unremoveable(filepath)
+
+                if is_priv:
+                    path = '/custpack/app/' + is_removeable + '/priv-app/' + file
+                else:
+                    is_withlib = is_withlib_or_withoutlib(filepath)
+                    if is_withlib:
+                        path = '/custpack/app/' + is_removeable + '/withlibs/' + file
+                    else:
+                        path = '/custpack/app/' + is_removeable + '/withoutlibs/' + file
+
+                apk_item = []
+                apk_item.append(name)
+                apk_item.append(path)
+                apk_item.append(version)
+                apk_item.append(perso)
+                apk_item = tuple(apk_item)
+                print apk_item
+
+                apk_info_list.append(apk_item)
+
+def generate_json_from_dir(directory, file):
+    apk_info_list = []
+
+    if directory[-1] != '/':
+        directory = directory + '/'
+
+    if directory[-4:-1] == 'pri':
+        is_pri = True
+    else:
+        is_pri = False
+
+    if os.path.exists(directory):
+        #travel the directory to get the demand information
+        get_versions(directory, apk_info_list, is_pri)
+
+        logger.debug(apk_info_list)
+
+        change_list_to_json(apk_info_list, file)
+    else:
+        raise PortingCheckerError('Invalid directory')
+
+def main():
+    """
+    The entrance of Porting Checker
+    检查工具的入口
+    """
+    try:
+        #--gen选项用于生成json文件, --gen所跟参数只可以是3rd.json和gms.json或者dir <localpath>
+        opts, args = getopt.getopt(sys.argv[1:], 'i:b:v:p:', ['gen=', 'dir'])
+    except getopt.GetoptError, e: 
+        print e
+        sys.exit(1)
+
+    server_dict = get_dict_from_json(SERVER_ADDRESS)
+    
+    ip = server_dict['ip']
+    branch = server_dict['branch'] 
+    project = server_dict['project']
+    version = server_dict['version']
+
+    try:
+        if opts:#有选项的情况:生成json
+            #opts[0] = [('--gen', 'gms.json')]
+            for opt, value in opts:
+                if opt == '--gen' and is_argument_in_dataset(value, CONFIG_SET):
+                    #启动生成json的html文件
+                    filepath = 'config/' + opts[0][1]
+                    js_filepath = config.STANDARD_JSON_CONFIG_JS
+                    if generate_config_jsfile(filepath, js_filepath):
+                        #用firefox打开html文件
+                        os.system('firefox %s' % HTML_GENERATER)
+                        sys.exit(0)
+                #不提供方法的接口    
+                elif opt == '--dir' and len(args) == 2:
+                    # args[0]: path, args[1]: filename
+                    project_dir = args[0]
+                    filename = args[1]
+                    generate_json_from_dir(project_dir, filename)
+                    sys.exit(0)
+                elif opt == '-i':
+                    ip = value          
+                elif opt == '-b':
+                    branch = value
+                elif opt == '-p':
+                    project = value     
+                elif opt == '-v':
+                    version = value                
+            server_dict['ip'] = ip
+            server_dict['branch'] = branch
+            server_dict['project'] = project
+            server_dict['version'] = version
+            change_dict_to_json(server_dict, SERVER_ADDRESS)
+
+        #无选项的情况:依照json进行检查
+        remote_addr = '%s:/local/build/%s/%s/custo_wimdata_ng/wcustores/%s/App' % (ip, branch, version, project)
+        print 'scp android-bld@%s/*.json .' % remote_addr
+        os.system('scp android-bld@%s/*.json ./config' % remote_addr)
+        #run('scp android-bld@%s/*.json .' % remote_addr ,events={'(?i)password': 'An123456\\n'})
+
+        start_checking(args)
+
+    except (EOFError, KeyboardInterrupt):
+        print HINT_EXIT
+        sys.exit(1)
+    except Exception, e:
+        print e
+        sys.exit(1)
+
+def check_handler(standard_dict, path_dict, perso_list):
+    """
+    按照标准字典检查手机中的信息
+    """
+    check_result = 'PASS'
+    diff_dict = {}
+    logger.debug(standard_dict)
+    for pkg in standard_dict:
+        # 判断pkg是否是需要判断的perso
+        logger.debug(pkg)
+        logger.debug(standard_dict[pkg])
+        if is_argument_in_dataset(standard_dict[pkg]['perso'], perso_list, True):
+            print 'Checking %s now...' % pkg
+            diff_dict[pkg] = {}
+
+            if path_dict.has_key(pkg):
+                # compare path
+                pkg_path = path_dict[pkg]
+                if standard_dict[pkg].has_key('path'):
+                    result = compare_string(standard_dict[pkg]['path'], pkg_path)
+                    if not result:
+                        check_result = 'FAIL'
+                        diff_dict[pkg]['pkg_path'] = pkg_path
+                        diff_dict[pkg]['standard_path'] = standard_dict[pkg]['path']
+                        print '    Different path,'
+                        print '        standard_path: %s' % standard_dict[pkg]['path']
+                        print '        pkg_path:      %s' % pkg_path
+                    else:
+                        print '    Equal path'
+                else:
+                    #raise StandardJsonError('Package:%s lack versionName in standard.json')
+                    print 'Error: %s lack versionName in standard.json' % pkg
+                    sys.exit(1)
+
+                pkg_version = get_version_from_phone(pkg)
+                if not pkg_version:
+                    pkg_version = ''
+
+                # compare version
+                if standard_dict[pkg].has_key('versionName'):
+                    result = compare_string(standard_dict[pkg]['versionName'], pkg_version)
+                    if not result:
+                        check_result = 'FAIL'
+                        diff_dict[pkg]['pkg_version'] = pkg_version
+                        diff_dict[pkg]['standard_verison'] = standard_dict[pkg]['versionName']
+                        print '    Different versionName,'
+                        print '        standard_verison: %s' % standard_dict[pkg]['versionName']
+                        print '        pkg_version:      %s' % pkg_version
+
+                    else:
+                        print '    Equal version'
+                else:
+                    #raise StandardJsonError('Package:%s lack versionName in standard.json' % pkg)
+                    print 'Error: %s lack versionName in standard.json' % pkg
+                    sys.exit(1)
+
+            else:
+                #out put error msg
+                check_result = 'FAIL'
+                print '    Package not porting.'
+                diff_dict[pkg]['info'] = 'Package not porting.'
+
+    print 'Checking Result: %s' % check_result
+    return diff_dict
+
+def start_checking(args):
+    """
+    检查手机中的apk是否按照3rd.json和gsm.json进行预置.
+    """
+    logger.debug('perso list:%s' % args)
+    if len(args) > 0:
+        perso_list = ['all']
+        perso_list = perso_list + args
+    else:
+        print 'Please add perso parameter: tmo(TMobile), mps(MetroPCS))'
+        is_confirm = raw_input('You mean check all? Press y(Yes) to confirm:')
+        if is_confirm.lower() == 'y':
+            perso_list = PERSO_LIST
+        else:
+            sys.exit(1)
+
+    #标准的json模板, 如果不存在这两个文件,则报错退出
+    if not (os.path.isfile(STANDARD_3RD_FILE) and os.path.isfile(STANDARD_GMS_FILE)):
+        #raise PortingCheckerError('Not found the 3rd.json or gms.json')
+        print 'Error: Not found the 3rd.json or gms.json'
+        sys.exit(1)
+    else:
+    #将两个文件合并
+        third_dict = get_dict_from_json(STANDARD_3RD_FILE)
+        gms_dict = get_dict_from_json(STANDARD_GMS_FILE)
+        #将3rd的dict和gms的dict合并成一个dict
+        standard_dict = merge_dict(third_dict, gms_dict)
+
+    #Get the path_dict from phone
+    command = 'adb shell pm list packages -f > %s' % PATH_FILE
+    try:
+        status = os.system(command)
+        if status == 0:#正常获取到path列表文件
+            if os.path.isfile(config.PATH_FILE):
+                path_dict = get_pkg_path_dict()
+            else:
+                sys.exit(1)
+
+            logger.debug('pkg path dict:%s' % path_dict)
+            logger.debug('third party path dict:%s' % path_dict)
+            logger.debug('gms path dict:%s' % path_dict)
+            #获取difference dict
+            diff_dict = check_handler(standard_dict, path_dict, perso_list)
+            logger.debug('diff dict:%s' % diff_dict)
+            #将diff_dict显示为compare_result.txt
+            result_string = ''
+            for pkg in diff_dict:
+                info = diff_dict[pkg]
+
+                if info:
+                    result_string += '%s\n' % pkg
+                    if info.has_key('info'):
+                        result_string += '    %s\n' % info['info']
+                    else:
+                        if info.has_key('pkg_path'):
+                            result_string += '    Different path,\n'
+                            result_string += '        standard_path: %s\n' % info['standard_path']
+                            result_string += '        pkg_path:      %s\n' % info['pkg_path']
+                        if info.has_key('pkg_version'):
+                            result_string += '    Different version,\n'
+                            result_string += '        standard_version: %s\n' % info['standard_verison']
+                            result_string += '        pkg_version:      %s\n' % info['pkg_version']
+                    result_string += '\n'
+
+            f = open(config.RESULT_FILE, 'w')
+            result = str(result_string)
+            f.write(result)
+            f.close()
+
+            print '\nStart checking signature...'
+            os.system('python check_signature')
+            print '\nCheck over!\nResult output: %s' % RESULT_FILE
+
+        else:
+            print(HINT_UNCONNECTED_USB)
+    except (EOFError, KeyboardInterrupt):
+        print HINT_EXIT
+        sys.exit(1)
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,99 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+#Get Apk signature list 
+
+__author__ = 'Tan Ying<ying.tan@tcl.com>' 
+
+import os
+import sys
+import re
+import getopt
+import commands
+import shutil
+from utils import *
+
+def cut_signinfo(keyword, string):
+    left_index = string.find(keyword)
+    temp_string = string[left_index:]
+    right_index = temp_string.find(',') 
+
+    signature = temp_string[:right_index]
+    return signature
+
+def get_apk_sign(path):
+
+    print 'Get signature of %s' % path
+    command = 'adb pull %s ./bin/' % path
+    commands.getstatusoutput(command)
+
+    apkname = get_apkname_form_path(path)
+    if os.path.isfile('./bin/%s' % apkname):
+        status, output = commands.getstatusoutput('jarsigner -certs -verbose -verify ./bin/%s' % apkname)
+
+        cn_sign = cut_signinfo('CN=', output)
+        ou_sign = cut_signinfo('OU=', output)
+        o_sign = cut_signinfo('O=', output)
+
+        signature = cn_sign + ',' + ou_sign + ',' + o_sign
+
+        print '  %s' % signature
+        #os.system('./getcertificate ./bin/%s' % apkname)
+        os.remove('./bin/%s' % apkname)
+        return signature
+
+def display_signlist(error, normal):
+    string = ''
+    string += '*****Error Signature List*****\n'
+    for apk in error:
+        string += '%s: %s\n' % (apk, error[apk])
+
+    string += '\n*****Normal Signature List*****\n'
+    for apk in normal:
+        string += '%s: %s\n' % (apk, normal[apk])
+
+    f = open(RESULT_FILE, 'a')
+    #f = open(SIGN_RESULT, 'w')
+    result = str(string)
+    f.write(result)
+    f.close()
+
+def main():
+    # apk_path = '/system/app/LatinIME.apk'
+    # print get_apk_sign(apk_path)
+
+    try:
+        #Get the path_dict from phone
+        command = 'adb shell pm list packages -f > %s' % PATH_FILE
+        status = os.system(command)
+
+        if status == 0:#normal usb debug
+            error_dict = {}
+            normal_dict = {}
+
+            if os.path.isfile(config.PATH_FILE):
+                path_dict = get_pkg_path_dict()
+
+                for pkg in path_dict:
+                    apk_path = path_dict[pkg]
+
+                    #if apk_path.find('/system/') == 0:                        
+                    signature = get_apk_sign(apk_path)
+
+                    if signature and signature.find('CN=Android,OU=Android,O=Android') == -1:
+                        normal_dict[apk_path] = signature
+                    else:
+                        error_dict[apk_path] = signature
+                
+
+                display_signlist(error_dict, normal_dict)
+
+            else:
+                sys.exit(1)          
+        else:
+            print(HINT_UNCONNECTED_USB)
+    except (EOFError, KeyboardInterrupt):
+        print HINT_EXIT
+        sys.exit(1)    
+
+if __name__ == '__main__':
+	main()

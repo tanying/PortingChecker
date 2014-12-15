@@ -30,12 +30,17 @@
 
 #apkInfo p div input {
     display: block;
+    width: 500px;
     float: left;
 }
 
-#addApk {
+#addApk{
     float: left;
     margin-left: 20px;
+}
+
+.delete {
+    margin-left: 565px;
 }
 
 #generate {

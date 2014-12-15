@@ -37,6 +37,3 @@ run = Button(rt, text='start checking...', anchor = 'center', width = 15, height
 run.pack()
 
 rt.mainloop()
-
-
-
