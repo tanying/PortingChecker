@@ -1,0 +1,117 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+#Get Apk signature list 
+
+__author__ = 'Tan Ying<ying.tan@tcl.com>' 
+
+import os
+import sys
+import re
+import getopt
+import commands
+import shutil
+from utils import *
+
+def cut_signinfo(keyword, string):
+    left_index = string.find(keyword)
+    temp_string = string[left_index:]
+    right_index = temp_string.find(',') 
+
+    signature = temp_string[:right_index]
+    return signature
+
+def get_apk_sign(apkname):
+    status, output = commands.getstatusoutput('jarsigner -certs -verbose -verify ./bin/%s' % apkname)
+
+    cn_sign = cut_signinfo('CN=', output)
+    ou_sign = cut_signinfo('OU=', output)
+    o_sign = cut_signinfo('O=', output)
+
+    signature = cn_sign + ',' + ou_sign + ',' + o_sign
+
+    print '  %s' % signature
+    #os.system('./getcertificate ./bin/%s' % apkname)
+    return signature
+
+def get_apk_zipalign(apkname):
+    status, output = commands.getstatusoutput('./zipalign -c -v 4 ./bin/%s' % apkname)
+
+    index = output.rfind('Verification')
+
+    result = output[index:]
+
+    print result
+
+    if result == 'Verification succesful':
+        return True
+    else:
+        return False
+
+def display_result_list(error, normal, nozipalign):
+    string = ''
+    string += '*****Error Signature List*****\n'
+    for apk in error:
+        string += '%s: %s\n' % (apk, error[apk])
+
+    string += '\n*****Normal Signature List*****\n'
+    for apk in normal:
+        string += '%s: %s\n' % (apk, normal[apk])
+
+    string += '\n*****Not do zipalign List*****\n'
+    for apk in nozipalign:
+        string += '%s: %s\n' % (apk, nozipalign[apk])
+
+    f = open(RESULT_FILE, 'a')
+    result = str(string)
+    f.write(result)
+    f.close()
+
+def main():
+    try:
+        #Get the path_dict from phone
+        command = 'adb shell pm list packages -f > %s' % PATH_FILE
+        status = os.system(command)
+
+        if status == 0:#normal usb debug
+            sign_error_dict = {}
+            sign_normal_dict = {}
+
+            align_error_dict = {}
+
+            if os.path.isfile(config.PATH_FILE):
+                path_dict = get_pkg_path_dict()
+
+                for pkg in path_dict:
+                    apk_path = path_dict[pkg]
+              
+                    print 'Get signature of %s' % apk_path
+                    command = 'adb pull %s ./bin/' % apk_path
+                    commands.getstatusoutput(command)
+
+                    apkname = get_apkname_form_path(apk_path)
+                    if os.path.isfile('./bin/%s' % apkname):
+                        signature = get_apk_sign(apkname)
+                        zipalign = get_apk_zipalign(apkname)
+
+                    os.remove('./bin/%s' % apkname)
+
+                    if signature and signature.find('CN=Android,OU=Android,O=Android') == -1:
+                        sign_normal_dict[apk_path] = signature
+                    else:
+                        sign_error_dict[apk_path] = signature
+
+                    if not zipalign:
+                        align_error_dict[apk_path] = zipalign
+
+                display_result_list(sign_error_dict, sign_normal_dict, align_error_dict)
+
+            else:
+                sys.exit(1)          
+        else:
+            print(HINT_UNCONNECTED_USB)
+    except (EOFError, KeyboardInterrupt):
+        print HINT_EXIT
+        sys.exit(1)    
+
+if __name__ == '__main__':
+	main()

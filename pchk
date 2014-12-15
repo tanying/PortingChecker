@@ -306,11 +306,8 @@ def start_checking(args):
             f.write(result)
             f.close()
 
-            print '\nStart checking signature...'
-            os.system('python check_signature')
-
-            print '\nStart checking zip-align...'
-            os.system('python check_zipalign')           
+            print '\nStart checking signature and zipalign...'
+            os.system('python extra_check')         
 
             print '\nCheck over!\nResult output: %s' % RESULT_FILE
 
